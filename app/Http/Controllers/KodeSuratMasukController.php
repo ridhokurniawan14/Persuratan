@@ -15,7 +15,7 @@ class KodeSuratMasukController extends Controller
      */
     public function index()
     {
-        return view('surat-masuk.kode-surat-masuk', [
+        return view('data-master.kode-surat-masuk', [
             "halaman" => "Data Master",
             "title" => "Surat Masuk",
             "tab_title" => "Kode Surat Masuk"

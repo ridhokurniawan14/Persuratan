@@ -8,7 +8,7 @@
         <div class="login-box-body">
           <div class="card card-outline card-primary">
             <div class="card-header text-center">
-              <a href="../../index2.html" class="h1"><b>Grisa</b>Sip</a>
+              <a href="#" class="h1"><b>Grisa</b>Sip</a>
             </div>
             <div class="card-body">
               <p class="login-box-msg">Akun Anda adalah Privacy Anda, Amankan Privacy Anda dengan Baik.</p>

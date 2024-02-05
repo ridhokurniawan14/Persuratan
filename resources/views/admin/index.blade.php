@@ -18,32 +18,58 @@
                 @csrf
                 <div class="card-body">
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Nama</label>
-                    <input name="nama" autocomplete="off" type="text" class="form-control @error('nama') is-invalid @enderror" id="exampleInputEmail1" placeholder="Enter Nama">
+                    <label for="name">Nama</label>
+                    <input name="name" required autocomplete="off" value="{{ old('name') }}" type="text" class="form-control @error('name') is-invalid @enderror" id="name" placeholder="Masukkan Nama">
+                    @error('name')
+                      <div class="invalid-feedback">
+                        {{ $message }}
+                      </div>
+                    @enderror
                   </div>
                   <div class="form-group">
-              <label for="exampleInputEmail1">Email</label>
-                    <input name="email" autocomplete="off" type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+                    <label for="email">Email</label>
+                    <input name="email" required autocomplete="off" value="{{ old('email') }}" type="email" class="form-control @error('email') is-invalid @enderror" id="email" placeholder="Masukkan email">
+                    @error('email')
+                      <div class="invalid-feedback">
+                        {{ $message }}
+                      </div>
+                    @enderror
                   </div>
                   <div class="form-group">
-                    <label for="exampleInputPassword1">Password</label>
-                    <input name="password" type="password"  class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    <label for="password">Password</label>
+                    <input name="password" required type="password" value="{{ old('password') }}"  class="form-control @error('password') is-invalid @enderror" id="password" placeholder="Massukkan Password">
+                    @error('password')
+                      <div class="invalid-feedback">
+                        {{ $message }}
+                      </div>
+                    @enderror
                   </div>
                   <div class="form-group">
-                    <label for="exampleInputFile">Foto</label>
+                    <label for="foto">Foto</label>
                     <div class="input-group">
                       <div class="custom-file">
-                        <input name="foto" type="file" class="custom-file-input" id="exampleInputFile">
-                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                        <input name="foto" required type="file" value="{{ old('foto') }}" class="custom-file-input @error('foto') is-invalid @enderror" id="foto">
+                        <label class="custom-file-label" for="foto">Pilih file</label>
+                        @error('foto')
+                          <div class="invalid-feedback">
+                            {{ $message }}
+                          </div>
+                        @enderror
                       </div>
                     </div>
                   </div>
                   <div class="form-group">
                     <label>Kategori</label>
-                    <select name="kategori" class="custom-select">
+                    <select name="kategori" value="{{ old('kategori') }}" required class="custom-select @error('kategori') is-invalid @enderror">
+                      <option>Pilihan Kategori</option>
                       <option value="0">Admin</option>
                       <option value="1">Superadmin</option>
                     </select>
+                    @error('kategori')
+                      <div class="invalid-feedback">
+                        {{ $message }}
+                      </div>
+                    @enderror
                   </div>
                 </div>
                 <!-- /.card-body -->
@@ -60,6 +86,11 @@
           <!--/.col (left) -->
           <!-- right column -->
           <div class="col-md-6">
+            @if(session()->has('success'))
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+              </div>
+            @endif
             {{-- Data Tabel --}}
             <div class="card">
               <div class="card-header">
@@ -70,34 +101,33 @@
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
+                    <th>No</th>
                     <th>Nama</th>
                     <th>Email</th>
                     <th></th>
                   </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                    <td>Trident</td>
-                    <td>Internet
-                      Explorer 4.0
-                    </td>
-                    <td>
-                      <div class="btn-group show">
-                        <button type="button" class="btn btn-info dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="true">
-                          Action <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(67px, 37px, 0px);">
-                          <a class="dropdown-item" href="#">Detail Data</a>
-                          <a class="dropdown-item" href="#">Edit</a>
-                          <div class="dropdown-divider"></div>
-                          <a class="dropdown-item" href="#">Hapus</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>                  
+                    @foreach ($datas as $data)
+                      <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $data->name }}</td>
+                        <td>{{ $data->email }}</td>
+                        <td>
+                          <a href="/admin/{{ $data->email }}" class="badge bg-info"><span class="fas fa-eye"></span></a>
+                          <a href="#" class="badge bg-warning"><span class="fas fa-pen"></span></a>
+                          <form action="/admin/{{ $data->email }}" method="POST" class="d-inline">
+                            @method('delete')
+                            @csrf
+                            <button class="badge bg-danger border-0" onclick="return confirm('Are you sure?')"><span class="fas fa-trash"></span></button>
+                          </form>
+                        </td>
+                      </tr>                  
+                    @endforeach
                   </tbody>
                   <tfoot>
                   <tr>
+                    <th>No</th>
                     <th>Nama</th>
                     <th>Email</th>
                     <th></th>

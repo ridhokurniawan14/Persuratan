@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('kode_yplp', function (Blueprint $table) {
+        Schema::create('kode_yplps', function (Blueprint $table) {
             $table->id();
             $table->string('kode',2);
             $table->text('ket');
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kode_yplp');
+        Schema::dropIfExists('kode_yplps');
     }
 };

@@ -4,41 +4,41 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
-  <link rel="icon" href="img/grisasip.png">
+  <link rel="icon" href="/img/grisasip.png">
   <title> {{ $halaman }}  - GrisaSip</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
   <!-- DataTables -->
-  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-  <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <link rel="stylesheet" href="/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+  <link rel="stylesheet" href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
   <!-- iCheck -->
-  <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- JQVMap -->
-  <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
+  <link rel="stylesheet" href="/plugins/jqvmap/jqvmap.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="css/adminlte.min.css">
+  <link rel="stylesheet" href="/css/adminlte.min.css">
   <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <link rel="stylesheet" href="/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
   <!-- Daterange picker -->
-  <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
+  <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
-  <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+  <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
   <!-- Preloader -->
-  <div class="preloader flex-column justify-content-center align-items-center">
+  {{-- <div class="preloader flex-column justify-content-center align-items-center">
     <img class="animation__shake" src="img/GrisaSip.png" alt="AdminLTELogo" height="60" width="60">
-  </div>
+  </div> --}}
 
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -48,10 +48,10 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="/data-surat-masuk" class="nav-link">Data Surat Masuk</a>
+        <a href="/data-surat-masuk" class="nav-link">Surat Masuk</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="/data-surat-keluar" class="nav-link">Data Surat Keluar</a>
+        <a href="/data-surat-keluar" class="nav-link">Surat Keluar</a>
       </li>
     </ul>
 
@@ -84,14 +84,26 @@
           <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
         </div>
       </li> -->
-      <li class="nav-item dropdown">
-        <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Ridho Kurniawan</a>
-        <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu dropdown-menu-right border-0 shadow">
-          <li><a href="/ganti-password" class="dropdown-item">Ganti Password </a></li>
-          <li class="dropdown-divider"></li>
-          <li><a href="/logout" class="dropdown-item">Logout</a></li>
-        </ul>
-      </li>      
+      @auth
+        <li class="nav-item dropdown">
+          <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Selamat Datang, {{ auth()->user()->name }}</a>
+          <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu dropdown-menu-right border-0 shadow">
+            <li><a href="/ganti-password" class="dropdown-item"><i class="nav-icon fas fa-key"></i> Ganti Password </a></li>
+            <li class="dropdown-divider"></li>
+              <li>
+                <form action="/logout" method="POST">
+                  @csrf
+                  <button type="submit" class="dropdown-item"><i class="nav-icon fas fa-sign-out-alt"></i> Logout</button>
+                </form>
+              </li>
+          </ul>
+        </li>
+      @else
+        <li class="nav-item d-none d-sm-inline-block">
+          <a href="/login" class="nav-link">Login</a>
+        </li>      
+      @endauth
+      
     </ul>
   </nav>
   <!-- /.navbar -->
@@ -100,7 +112,7 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="#" class="brand-link">
-      <img src="img/GrisaSip.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <img src="/img/GrisaSip.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">Grisa Arsip</span>
     </a>
 
@@ -109,7 +121,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="img/GrisaSip.png" class="img-circle elevation-2" alt="User Image">
+          <img src="/img/GrisaSip.png" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="#" class="d-block">Ridho Kurniawan</a>
@@ -129,12 +141,13 @@
       </div> --}}
 
       <!-- Sidebar Menu -->
+      @auth
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="/dashboard" class="nav-link {{ ($tab_title == "Dashboard") ? 'active' : '' }}">
+            <a href="/dashboard" class="nav-link {{ Request::is('dashboard') ? 'active' : '' }}">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
@@ -142,8 +155,8 @@
               </p>
             </a>
           </li>
-          <li class="nav-item {{ ($tab_title == "Kode Surat" || $tab_title == "Kategori Kode" || $tab_title == "Kode Surat Masuk") ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link">
+          <li class="nav-item {{ Request::is('data-master/kode-surat','data-master/kategori-kode','data-master/kode-surat-masuk') ? 'menu-open' : ''  }}">
+            <a href="#" class="nav-link {{ Request::is('data-master/kode-surat','data-master/kategori-kode','data-master/kode-surat-masuk') ? 'active' : ''  }}">
               <i class="nav-icon fa fa-th-list"></i>
               <p>
                 Data Master
@@ -151,7 +164,7 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item {{ ($tab_title == "Kode Surat" || $tab_title == "Kategori Kode") ? 'menu-open' : '' }}">
+              <li class="nav-item {{ Request::is('data-master/kode-surat','data-master/kategori-kode') ? 'menu-open' : ''  }}">
                 <a href="#" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
@@ -161,13 +174,13 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="/kode-surat" class="nav-link {{ ($tab_title === "Kode Surat") ? 'active' : '' }}">
+                    <a href="/data-master/kode-surat/" class="nav-link {{ Request::is('data-master/kode-surat') ? 'active' : '' }}">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Kode Surat</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="/kategori-kode" class="nav-link {{ ($tab_title === "Kategori Kode") ? 'active' : '' }}">
+                    <a href="/data-master/kategori-kode/" class="nav-link {{ Request::is('data-master/kategori-kode') ? 'active' : ''  }}">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Kategori Kode</p>
                     </a>
@@ -176,7 +189,7 @@
               </li>
             </ul>
             <ul class="nav nav-treeview">
-              <li class="nav-item {{ ($tab_title === "Kode Surat Masuk") ? 'menu-open' : '' }}">
+              <li class="nav-item {{ Request::is('data-master/kode-surat-masuk') ? 'menu-open' : ''  }}">
                 <a href="#" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
@@ -186,7 +199,7 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="/kode-surat-masuk" class="nav-link {{ ($tab_title === "Kode Surat Masuk") ? 'active' : '' }}">
+                    <a href="/data-master/kode-surat-masuk" class="nav-link {{ Request::is('data-master/kode-surat-masuk') ? 'active' : ''  }}">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Kode Surat Masuk</p>
                     </a>
@@ -195,8 +208,8 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item {{ ($tab_title == "Surat Keluar" || $tab_title == "Surat Masuk") ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link">
+          <li class="nav-item {{ Request::is('surat-keluar','surat-masuk') ? 'menu-open' : ''  }}">
+            <a href="#" class="nav-link {{ Request::is('surat-keluar','surat-masuk') ? 'active' : ''  }}">
               <i class="nav-icon fas fa-pen"></i>
               <p>
                 Input Surat
@@ -206,21 +219,21 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/surat-masuk" class="nav-link {{ ($tab_title === "Surat Masuk") ? 'active' : '' }}">
+                <a href="/surat-masuk" class="nav-link {{ Request::is('surat-masuk') ? 'active' : ''  }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Surat Masuk</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/surat-keluar" class="nav-link {{ ($tab_title === "Surat Keluar") ? 'active' : '' }}">
+                <a href="/surat-keluar" class="nav-link {{ Request::is('surat-keluar') ? 'active' : ''  }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Surat Keluar</p>
                 </a>
               </li>
             </ul>
           </li>
-          <li class="nav-item {{ ($tab_title == "Data Surat Masuk" || $tab_title == "Data Surat Keluar") ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link">
+          <li class="nav-item {{ Request::is('data-surat-masuk','data-surat-keluar') ? 'menu-open' : ''  }}">
+            <a href="#" class="nav-link {{ Request::is('data-surat-masuk','data-surat-keluar') ? 'active' : ''  }}">
               <i class="nav-icon fas fa-copy"></i>
               <p>
                 Data Surat
@@ -230,39 +243,31 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/data-surat-masuk" class="nav-link {{ ($tab_title === "Data Surat Masuk") ? 'active' : '' }}">
+                <a href="/data-surat-masuk" class="nav-link {{ Request::is('data-surat-masuk') ? 'active' : ''  }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Surat Masuk</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/data-surat-keluar" class="nav-link {{ ($tab_title === "Data Surat Keluar") ? 'active' : '' }}">
+                <a href="/data-surat-keluar" class="nav-link {{ Request::is('data-surat-keluar') ? 'active' : ''  }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Surat Keluar</p>
                 </a>
               </li>
             </ul>
-          </li>
+          </li>   
           <li class="nav-item">
-            <a href="/admin" class="nav-link {{ ($tab_title === "Data Admin") ? 'active' : '' }}">
+            <a href="/admin" class="nav-link {{ Request::is('admin') ? 'active' : '' }}">
               <i class="nav-icon fas fa-user"></i>
               <p>
-                Data Admin
+                Admin
                 <!-- <span class="right badge badge-danger">New</span> -->
               </p>
             </a>
-          </li>          
-          <li class="nav-item">
-            <a href="/logout" class="nav-link">
-              <i class="nav-icon fas fa-sign-out-alt" aria-hidden="true"></i>
-              <p>
-                Logout
-                <!-- <span class="right badge badge-danger">New</span> -->
-              </p>
-            </a>
-          </li>        
+          </li>             
         </ul>
       </nav>
+      @endauth
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
@@ -310,52 +315,52 @@
 <!-- ./wrapper -->
 
 <!-- jQuery -->
-<script src="plugins/jquery/jquery.min.js"></script>
+<script src="/plugins/jquery/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
-<script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
   $.widget.bridge('uibutton', $.ui.button)
 </script>
 <!-- Bootstrap 4 -->
-<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- DataTables  & Plugins -->
-<script src="plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-<script src="plugins/jszip/jszip.min.js"></script>
-<script src="plugins/pdfmake/pdfmake.min.js"></script>
-<script src="plugins/pdfmake/vfs_fonts.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script src="/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="/plugins/jszip/jszip.min.js"></script>
+<script src="/plugins/pdfmake/pdfmake.min.js"></script>
+<script src="/plugins/pdfmake/vfs_fonts.js"></script>
+<script src="/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <!-- ChartJS -->
-<script src="plugins/chart.js/Chart.min.js"></script>
+<script src="/plugins/chart.js/Chart.min.js"></script>
 <!-- Sparkline -->
-<script src="plugins/sparklines/sparkline.js"></script>
+<script src="/plugins/sparklines/sparkline.js"></script>
 <!-- JQVMap -->
-<script src="plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+<script src="/plugins/jqvmap/jquery.vmap.min.js"></script>
+<script src="/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
 <!-- jQuery Knob Chart -->
-<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+<script src="/plugins/jquery-knob/jquery.knob.min.js"></script>
 <!-- daterangepicker -->
-<script src="plugins/moment/moment.min.js"></script>
-<script src="plugins/daterangepicker/daterangepicker.js"></script>
+<script src="/plugins/moment/moment.min.js"></script>
+<script src="/plugins/daterangepicker/daterangepicker.js"></script>
 <!-- Tempusdominus Bootstrap 4 -->
-<script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<script src="/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
 <!-- Summernote -->
-<script src="plugins/summernote/summernote-bs4.min.js"></script>
+<script src="/plugins/summernote/summernote-bs4.min.js"></script>
 <!-- overlayScrollbars -->
-<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<script src="/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
-<script src="js/adminlte.js"></script>
+<script src="/js/adminlte.js"></script>
 <!-- AdminLTE for demo purposes -->
 {{-- <script src="js/demo.js"></script> --}}
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="js/pages/dashboard.js"></script>
+{{-- <script src="js/pages/dashboard.js"></script> --}}
 <!-- Page specific script -->
 <script>
   $(function () {

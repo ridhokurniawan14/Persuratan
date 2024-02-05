@@ -18,18 +18,18 @@
                 <div class="card-body">
                   <div class="form-group">
                     <label>Kode </label>
-                    <select class="custom-select">
+                    <select name="kode" class="custom-select">
                       <option>Admin</option>
                       <option>Superadmin</option>
                     </select>
                   </div>
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Nomor</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Masukkan Nomor">
+                    <label for="nomor">Nomor</label>
+                    <input type="text" name="nomor" class="form-control" id="nomor" placeholder="Masukkan Nomor">
                   </div>
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Keterangan</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Masukkan Keterangan">
+                    <label for="keterangan">Keterangan</label>
+                    <input type="text" name="keterangan" class="form-control" id="keterangan" placeholder="Masukkan Keterangan">
                   </div>
                 </div>
                 <!-- /.card-body -->
@@ -56,17 +56,18 @@
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
+                    <th>No</th>
                     <th>Kode</th>
                     <th>Keterangan</th>
                     <th></th>
                   </tr>
                   </thead>
                   <tbody>
+                    @foreach ($datas as $data)                   
                   <tr>
-                    <td>Trident</td>
-                    <td>Internet
-                      Explorer 4.0
-                    </td>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $data->kode }}</td>
+                    <td>{{ $data->ket }}</td>
                     <td>
                       <div class="btn-group show">
                         <button type="button" class="btn btn-info dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="true">
@@ -80,10 +81,12 @@
                         </div>
                       </div>
                     </td>
-                  </tr>                  
+                  </tr> 
+                  @endforeach                 
                   </tbody>
                   <tfoot>
                   <tr>
+                    <th>No</th>
                     <th>Kode</th>
                     <th>Keterangan</th>
                     <th></th>

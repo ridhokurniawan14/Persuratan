@@ -14,15 +14,26 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form>
+              <form method="POST" action="/data-master/kode-surat">
+                @csrf
                 <div class="card-body">
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Kode</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Masukkan Kode">
+                    <label for="kode">Kode</label>
+                    <input autofocus autocomplete="off" value="{{ old('kode') }}" required type="text" name="kode" class="form-control @error('kode') is-invalid @enderror"" id="kode" placeholder="Masukkan Kode">
+                    @error('kode')
+                      <div class="invalid-feedback">
+                        {{ $message }}
+                      </div>
+                    @enderror
                   </div>
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Keterangan</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Masukkan Keterangan">
+                    <label for="ket">Keterangan</label>
+                    <input type="text" autocomplete="off" value="{{ old('ket') }}" required name="ket" class="form-control @error('ket') is-invalid @enderror"" id="ket" placeholder="Masukkan Keterangan">
+                    @error('ket')
+                      <div class="invalid-feedback">
+                        {{ $message }}
+                      </div>
+                    @enderror
                   </div>
                 </div>
                 <!-- /.card-body -->
@@ -39,6 +50,11 @@
           <!--/.col (left) -->
           <!-- right column -->
           <div class="col-md-6">
+            @if(session()->has('success'))
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+              </div>
+            @endif
             {{-- Data Tabel --}}
             <div class="card">
               <div class="card-header">
@@ -56,28 +72,22 @@
                   </tr>
                   </thead>
                   <tbody>
+                    @foreach ($datas as $data)                   
                   <tr>
-                    <td>1</td>
-                    <td>Internet
-                      Explorer 4.0
-                    </td>
-                    <td>Internet
-                      Explorer 4.0
-                    </td>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $data->kode }}</td>
+                    <td>{{ $data->ket }}</td>
                     <td>
-                      <div class="btn-group show">
-                        <button type="button" class="btn btn-info dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="true">
-                          Action <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(67px, 37px, 0px);">
-                          <a class="dropdown-item" href="#">Detail Data</a>
-                          <a class="dropdown-item" href="#">Edit</a>
-                          <div class="dropdown-divider"></div>
-                          <a class="dropdown-item" href="#">Hapus</a>
-                        </div>
-                      </div>
+                      <a href="/data-master/kode-surat/{{ $data->kode }}" class="badge bg-info"><span class="fas fa-eye"></span></a>
+                      <a href="#" class="badge bg-warning"><span class="fas fa-pen"></span></a>
+                      <form action="/data-master/kode-surat/{{ $data->kode }}" method="post" class="d-inline">
+                        @method('delete')
+                        @csrf
+                        <button class="badge bg-danger border-0" onclick="return confirm('Are you sure?')"><span class="fas fa-trash"></span></button>
+                      </form>
                     </td>
-                  </tr>                  
+                  </tr>   
+                  @endforeach               
                   </tbody>
                   <tfoot>
                   <tr>
