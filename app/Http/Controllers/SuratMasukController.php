@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\surat_masuk;
-use App\Http\Requests\Storesurat_masukRequest;
-use App\Http\Requests\Updatesurat_masukRequest;
+use App\Models\kode_surat_masuk;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class SuratMasukController extends Controller
 {
@@ -15,10 +18,15 @@ class SuratMasukController extends Controller
      */
     public function index()
     {
-        return view('surat-masuk.surat-masuk', [
-            "halaman" => "Input Surat Masuk",
-            "title" => "Input Surat",
-            "tab_title" => "Surat Masuk"
+        return view('dashboard.surat-masuk.index', [
+            "halaman" => "Data Surat Masuk",
+            "title" => "Data Surat",
+            "tab_title" => "Data Surat Masuk",
+            "datas" => DB::table('kode_surat_masuks')
+            ->join('surat_masuks', 'kode_surat_masuks.id', '=', 'surat_masuks.kode_surat_masuk')
+            ->join('users', 'surat_masuks.created_by', '=', 'users.id')
+            ->select('kode_surat_masuks.kode', 'surat_masuks.id', 'surat_masuks.alamat_pengirim', 'surat_masuks.tanggal_surat', 'surat_masuks.nomor_surat', 'users.name')
+            ->orderBy('surat_masuks.id')->get(),
         ]);
     }
 
@@ -29,18 +37,41 @@ class SuratMasukController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboard.surat-masuk.create', [
+            "halaman" => "Input Surat Masuk",
+            "title" => "Input Surat",
+            "tab_title" => "Surat Masuk",
+            "categories" => kode_surat_masuk::orderBy('kode')->get()
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\Storesurat_masukRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Storesurat_masukRequest $request)
+    public function store(Request $request)
     {
-        //
+        $validateData = $request->validate([
+            'kode_surat_masuk' => ['required', 'numeric', 'digits_between:1,2'], // Angka dengan panjang maksimum 2 digit
+            'alamat_pengirim' => ['required', 'string'], // Teks
+            'tanggal_surat' => ['required', 'date'], // Tanggal
+            'nomor_surat' => ['required', 'unique:surat_masuks'], // Teks
+            'perihal' => ['required', 'string'], // Teks
+            'file' => ['nullable', 'sometimes', 'image', 'mimes:jpeg,png', 'max:5120'], // Gambar JPEG atau PNG dengan ukuran maksimal 5 MB (5120 KB)
+        ]);
+
+        // Setelah validasi, tambahkan 'created_by' ke dalam data
+        $validateData['created_by'] = auth()->user()->id;
+
+        if($request->file('file')) {
+            $validateData['file'] = $request->file('file')->store('surat-masuk-images');
+        }
+        
+        surat_masuk::create($validateData);
+        
+        return redirect('/surat-masuk/')->with('message', 'Data Berhasil Disimpan!');
     }
 
     /**
@@ -51,7 +82,20 @@ class SuratMasukController extends Controller
      */
     public function show(surat_masuk $surat_masuk)
     {
-        //
+        // Mendapatkan ekstensi file
+        $file_extension = pathinfo($surat_masuk->file, PATHINFO_EXTENSION);
+
+        return view('dashboard.surat-masuk.show', [
+            "halaman" => "Detail Surat Masuk",
+            "title" => "Detail Surat",
+            "tab_title" => "Surat Masuk",
+            'surat_masuk' => DB::table('kode_surat_masuks')
+            ->join('surat_masuks', 'kode_surat_masuks.id', '=', 'surat_masuks.kode_surat_masuk')
+            ->join('users', 'surat_masuks.created_by', '=', 'users.id')
+            ->select('kode_surat_masuks.kode', 'kode_surat_masuks.ket', 'surat_masuks.id', 'surat_masuks.alamat_pengirim', 'surat_masuks.tanggal_surat', 'surat_masuks.nomor_surat', 'users.name', 'surat_masuks.perihal', 'surat_masuks.file')
+            ->where('surat_masuks.id', $surat_masuk->id)->first(),
+            'file_extension' => $file_extension,
+        ]);
     }
 
     /**
@@ -62,21 +106,59 @@ class SuratMasukController extends Controller
      */
     public function edit(surat_masuk $surat_masuk)
     {
-        //
+        return view('dashboard.surat-masuk.edit', [
+            "halaman" => "Edit Surat Masuk",
+            "title" => "Edit Surat",
+            "tab_title" => "Edit Surat Masuk",
+            'surat_masuk' => $surat_masuk,
+            "categories" => kode_surat_masuk::orderBy('kode')->get()
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\Updatesurat_masukRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\surat_masuk  $surat_masuk
      * @return \Illuminate\Http\Response
      */
-    public function update(Updatesurat_masukRequest $request, surat_masuk $surat_masuk)
+    public function update(Request $request, surat_masuk $surat_masuk)
     {
-        //
-    }
+        $rules = [
+            'kode_surat_masuk' => ['required', 'numeric', 'digits_between:1,2'], // Angka dengan panjang maksimum 2 digit
+            'alamat_pengirim' => ['required', 'string'], // Teks
+            'tanggal_surat' => ['required', 'date'], // Tanggal
+            'perihal' => ['required', 'string'], // Teks
+        ];
 
+        // Jika nomor surat yang baru berbeda dengan nomor surat yang lama, tambahkan aturan validasi unik
+        if ($request->nomor_surat != $surat_masuk->nomor_surat) {
+            $rules['nomor_surat'] = ['required', 'string', 'unique:surat_masuks,nomor_surat'];
+        }
+
+        // Validasi data
+        $validateData = $request->validate($rules);
+
+        // Jika ada file yang diunggah, validasi foto
+        if($request->file('file')) {
+            $rules['file'] = ['sometimes', 'image', 'mimes:jpeg,png', 'max:5120'];
+        }
+
+        // Jika validasi berhasil dan ada file baru yang diunggah, hapus foto lama
+        if($request->file('file') && $request->oldImage) {
+            Storage::delete($request->oldImage);
+        }
+
+        // Jika ada file yang diunggah, simpan foto baru
+        if($request->file('file')) {
+            $validateData['file'] = $request->file('file')->store('surat-masuk-images');
+        }
+
+        // Update data surat_masuk
+        $surat_masuk->update($validateData);
+
+        return redirect('/surat-masuk/')->with('message', 'Data Berhasil Diupdate!');
+    }
     /**
      * Remove the specified resource from storage.
      *
@@ -85,6 +167,10 @@ class SuratMasukController extends Controller
      */
     public function destroy(surat_masuk $surat_masuk)
     {
-        //
+        if ($surat_masuk->file) {
+            Storage::delete($surat_masuk->file);
+        }
+        surat_masuk::destroy($surat_masuk->id);
+        return redirect('/surat-masuk/')->with('message', 'Data Berhasil Dihapus!');
     }
 }

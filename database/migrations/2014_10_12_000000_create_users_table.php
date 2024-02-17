@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->text('foto');
+            $table->string('foto')->nullable();
             $table->boolean('is_superadmin')->default(false);
             $table->rememberToken();
             $table->timestamps();

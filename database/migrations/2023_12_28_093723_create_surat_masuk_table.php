@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('surat_masuk', function (Blueprint $table) {
+        Schema::create('surat_masuks', function (Blueprint $table) {
             $table->increments('id');
             $table->string('kode_surat_masuk',3);
             $table->string('alamat_pengirim');
             $table->date('tanggal_surat');
             $table->string('nomor_surat');
             $table->string('perihal');
-            $table->text('file');
+            $table->text('file')->nullable();
             $table->tinyInteger('created_by');
             $table->timestamps();
         });
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('surat_masuk');
+        Schema::dropIfExists('surat_masuks');
     }
 };

@@ -31,6 +31,8 @@
   <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css">
+  <!-- Toastr -->
+  <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -48,10 +50,10 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="/data-surat-masuk" class="nav-link">Surat Masuk</a>
+        <a href="/surat-masuk/create" class="nav-link">Input Surat Masuk</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="/data-surat-keluar" class="nav-link">Surat Keluar</a>
+        <a href="/surat-keluar/create" class="nav-link">Input Surat Keluar</a>
       </li>
     </ul>
 
@@ -86,7 +88,7 @@
       </li> -->
       @auth
         <li class="nav-item dropdown">
-          <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Selamat Datang, {{ auth()->user()->name }}</a>
+          <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Selamat Datang, {{ ucwords(auth()->user()->name) }}</a>
           <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu dropdown-menu-right border-0 shadow">
             <li><a href="/ganti-password" class="dropdown-item"><i class="nav-icon fas fa-key"></i> Ganti Password </a></li>
             <li class="dropdown-divider"></li>
@@ -121,10 +123,14 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="/img/GrisaSip.png" class="img-circle elevation-2" alt="User Image">
+          @if (auth()->user()->foto)
+            <img src="{{ asset('storage/' . auth()->user()->foto) }}" class="img-circle elevation-2" alt="User Image">
+          @else
+            <img src="/img/user.png" class="img-circle elevation-2" alt="User Image">
+          @endif
         </div>
         <div class="info">
-          <a href="#" class="d-block">Ridho Kurniawan</a>
+          <a href="#" class="d-block">{{ ucwords(auth()->user()->name) }}</a>
         </div>
       </div>
 
@@ -155,8 +161,9 @@
               </p>
             </a>
           </li>
-          <li class="nav-item {{ Request::is('data-master/kode-surat','data-master/kategori-kode','data-master/kode-surat-masuk') ? 'menu-open' : ''  }}">
-            <a href="#" class="nav-link {{ Request::is('data-master/kode-surat','data-master/kategori-kode','data-master/kode-surat-masuk') ? 'active' : ''  }}">
+          @if(Auth::user()->is_superadmin == 1)
+          <li class="nav-item {{ Request::is('data-master*') ? 'menu-open' : ''  }}">
+            <a href="#" class="nav-link {{ Request::is('data-master*') ? 'active' : ''  }}">
               <i class="nav-icon fa fa-th-list"></i>
               <p>
                 Data Master
@@ -164,7 +171,7 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item {{ Request::is('data-master/kode-surat','data-master/kategori-kode') ? 'menu-open' : ''  }}">
+              <li class="nav-item {{ Request::is('data-master/kode-surat','data-master/kategori-kode','data-master/kode-surat/*/edit','data-master/kategori-kode/*/edit') ? 'menu-open' : ''  }}">
                 <a href="#" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
@@ -174,13 +181,13 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="/data-master/kode-surat/" class="nav-link {{ Request::is('data-master/kode-surat') ? 'active' : '' }}">
+                    <a href="/data-master/kode-surat/" class="nav-link {{ Request::is('data-master/kode-surat','data-master/kode-surat/*/edit') ? 'active' : '' }}">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Kode Surat</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="/data-master/kategori-kode/" class="nav-link {{ Request::is('data-master/kategori-kode') ? 'active' : ''  }}">
+                    <a href="/data-master/kategori-kode/" class="nav-link {{ Request::is('data-master/kategori-kode','data-master/kategori-kode/*/edit') ? 'active' : ''  }}">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Kategori Kode</p>
                     </a>
@@ -189,7 +196,7 @@
               </li>
             </ul>
             <ul class="nav nav-treeview">
-              <li class="nav-item {{ Request::is('data-master/kode-surat-masuk') ? 'menu-open' : ''  }}">
+              <li class="nav-item {{ Request::is('data-master/kode-surat-masuk*') ? 'menu-open' : ''  }}">
                 <a href="#" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
@@ -199,7 +206,7 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="/data-master/kode-surat-masuk" class="nav-link {{ Request::is('data-master/kode-surat-masuk') ? 'active' : ''  }}">
+                    <a href="/data-master/kode-surat-masuk" class="nav-link {{ Request::is('data-master/kode-surat-masuk','data-master/kode-surat-masuk/*/edit') ? 'active' : ''  }}">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Kode Surat Masuk</p>
                     </a>
@@ -208,63 +215,42 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item {{ Request::is('surat-keluar','surat-masuk') ? 'menu-open' : ''  }}">
-            <a href="#" class="nav-link {{ Request::is('surat-keluar','surat-masuk') ? 'active' : ''  }}">
-              <i class="nav-icon fas fa-pen"></i>
-              <p>
-                Input Surat
-                <i class="fas fa-angle-left right"></i>
-                <!-- <span class="badge badge-info right">6</span> -->
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="/surat-masuk" class="nav-link {{ Request::is('surat-masuk') ? 'active' : ''  }}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Surat Masuk</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="/surat-keluar" class="nav-link {{ Request::is('surat-keluar') ? 'active' : ''  }}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Surat Keluar</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item {{ Request::is('data-surat-masuk','data-surat-keluar') ? 'menu-open' : ''  }}">
-            <a href="#" class="nav-link {{ Request::is('data-surat-masuk','data-surat-keluar') ? 'active' : ''  }}">
+          @endif
+          <li class="nav-item {{ Request::is('surat-masuk*','surat-keluar*') ? 'menu-open' : ''  }}">
+            <a href="#" class="nav-link {{ Request::is('surat-masuk*','surat-keluar*') ? 'active' : ''  }}">
               <i class="nav-icon fas fa-copy"></i>
               <p>
-                Data Surat
+                Surat
                 <i class="fas fa-angle-left right"></i>
                 <!-- <span class="badge badge-info right">6</span> -->
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/data-surat-masuk" class="nav-link {{ Request::is('data-surat-masuk') ? 'active' : ''  }}">
+                <a href="/surat-masuk" class="nav-link {{ Request::is('surat-masuk*') ? 'active' : ''  }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Surat Masuk</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/data-surat-keluar" class="nav-link {{ Request::is('data-surat-keluar') ? 'active' : ''  }}">
+                <a href="/surat-keluar" class="nav-link {{ Request::is('surat-keluar*') ? 'active' : ''  }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Surat Keluar</p>
                 </a>
               </li>
             </ul>
           </li>   
+          @if(Auth::user()->is_superadmin == 1)
           <li class="nav-item">
-            <a href="/admin" class="nav-link {{ Request::is('admin') ? 'active' : '' }}">
+            <a href="/admin" class="nav-link {{ Request::is('admin','admin/*/edit') ? 'active' : '' }}">
               <i class="nav-icon fas fa-user"></i>
               <p>
                 Admin
                 <!-- <span class="right badge badge-danger">New</span> -->
               </p>
             </a>
-          </li>             
+          </li>
+          @endif             
         </ul>
       </nav>
       @endauth
@@ -357,6 +343,8 @@
 <script src="/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/js/adminlte.js"></script>
+<!-- Toastr -->
+<script src="/plugins/toastr/toastr.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 {{-- <script src="js/demo.js"></script> --}}
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
@@ -365,19 +353,52 @@
 <script>
   $(function () {
     $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      "responsive": true, "lengthChange": true, "autoWidth": false,
+      "paging": true, 
+      "buttons": ["copy", "csv", "excel", "pdf", "print"],
+      // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"], // yg sebelumnya
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
   });
+  function previewImage(inputId) {
+    const input = document.querySelector(`#${inputId}`);
+    const imgPreview = document.querySelector('.img-preview');
+    imgPreview.style.display = 'block';
+    const oFReader = new FileReader();
+    oFReader.readAsDataURL(input.files[0]);
+    oFReader.onload = function (oFREvent) {
+      imgPreview.src = oFREvent.target.result;
+    }
+  }
+  // function previewImage(){
+  //     const image = document.querySelector('#foto')
+  //     const imgPreview = document.querySelector('.img-preview')
+  //     imgPreview.style.display = 'block';
+  //     const oFReader = new FileReader();
+  //     oFReader.readAsDataURL(foto.files[0]);
+  //     oFReader.onload = function(oFREvent){
+  //     imgPreview.src = oFREvent.target.result;
+  //   }
+  // }
 </script>
+@if(Session::has('message'))
+<script>
+    toastr.options = {
+      "progressBar" : true,
+      "closeButton" : true
+    }
+    toastr.success('{{ Session::get('message') }}','Success!',{timeOut:5000});
+</script>
+@endif
+@if ($errors->any())
+  <script>
+    toastr.options = {
+      "progressBar": true,
+      "closeButton": true
+    }
+    @foreach ($errors->all() as $error)
+      toastr.error('{{ $error }}', 'Failed!', { timeOut: 5000 });
+    @endforeach
+  </script>
+@endif
 </body>
 </html>

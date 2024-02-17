@@ -29,12 +29,4 @@ class kode_yplps extends Model
     {
         return 'kode';
     }
-    // public function sluggable(): array
-    // {
-    //     return [
-    //         'slug' => [
-    //             'source' => 'title'
-    //         ]
-    //     ];
-    // }
 }

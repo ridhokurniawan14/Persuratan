@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('kode',2);
             $table->text('ket');
+            $table->rememberToken();
             $table->timestamps();
         });
     }

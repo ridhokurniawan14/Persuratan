@@ -3,9 +3,9 @@
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\KategoriKodeController;
 use App\Http\Controllers\KodeSuratController;
 use App\Http\Controllers\KodeSuratMasukController;
+use App\Http\Controllers\KodeSuratKeluarController;
 use App\Http\Controllers\SuratKeluarController;
 use App\Http\Controllers\SuratMasukController;
 use Illuminate\Support\Facades\Route;
@@ -25,17 +25,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// HALAMAN LOGIN
 Route::get('/login/',[LoginController::class, 'index'])->name('login')->middleware('guest'); 
 Route::post('/login/',[LoginController::class, 'authenticate']); 
 Route::post('/logout/',[LoginController::class, 'logout']); 
 
-// Route::get('/admin/',[AdminController::class, 'index'])->middleware('auth'); 
-// Route::post('/admin/',[AdminController::class, 'store']); 
-Route::resource('/admin/', AdminController::class)->middleware('auth');
-
-
-
-// Route::get('/dashboard/',[DashboardController::class, 'index'])->middleware('auth');
+// HALAMAN DASHBOARD
 Route::get('/dashboard/',function() {
     return view('dashboard.index', [
         "halaman" => "Dashboard",
@@ -44,36 +39,37 @@ Route::get('/dashboard/',function() {
     ]);
 })->middleware('auth');
 
-Route::resource('/data-master/kategori-kode', KategoriKodeController::class)->middleware('auth');
-Route::resource('/data-master/kode-surat', KodeSuratController::class)->middleware('auth');
-Route::delete('/data-master/kode-surat/{{ kode_surat }}}', [KodeSuratController::class, 'destroy'])->middleware('auth');
+// HALAMAN ADMIN
+Route::resource('/admin/', AdminController::class)->middleware(['auth', 'superadmin']);
+Route::delete('/admin/{id}', [AdminController::class, 'destroy'])->name('email.destroy')->middleware('superadmin');
+Route::get('/admin/{id}/edit', [AdminController::class, 'edit'])->middleware('auth', 'superadmin');
+Route::put('/admin/{id}', [AdminController::class, 'update'])->middleware('auth', 'superadmin');
 
+// HALAMAN DATA MASTER
+// HALAMAN KODE SURAT
+Route::resource('/data-master/kode-surat/', KodeSuratController::class)->middleware('auth');
+Route::delete('/data-master/kode-surat/{id}', [KodeSuratController::class, 'destroy'])->name('kode_yplps.destroy')->middleware('auth');
+Route::get('/data-master/kode-surat/{id}/edit', [KodeSuratController::class, 'edit'])->middleware('auth');
+Route::put('/data-master/kode-surat/{id}', [KodeSuratController::class, 'update'])->middleware('auth');
 
-// Route::get('/data-master/kode-surat/{kode_yplps:slug}', [KodeSuratController::class, 'show']); //Menampilkan detail data 
+// HALAMAN KATEGORI KODE
+Route::resource('/data-master/kategori-kode/', KodeSuratKeluarController::class)->middleware('auth');
+Route::delete('/data-master/kategori-kode/{id}', [KodeSuratKeluarController::class, 'destroy'])->name('id.destroy')->middleware('auth');
+Route::get('/data-master/kategori-kode/{id}/edit', [KodeSuratKeluarController::class, 'edit'])->middleware('auth');
+Route::put('/data-master/kategori-kode/{id}', [KodeSuratKeluarController::class, 'update'])->middleware('auth');
 
-Route::get('/data-master/kode-surat-masuk/',[KodeSuratMasukController::class, 'index'])->middleware('auth');
+// HALAMAN KODE SURAT MASUK
+Route::resource('/data-master/kode-surat-masuk/', KodeSuratMasukController::class)->middleware('auth');
+Route::delete('/data-master/kode-surat-masuk/{id}',[KodeSuratMasukController::class, 'destroy'])->name('kode.destroy')->middleware('auth');
+Route::get('/data-master/kode-surat-masuk/{id}/edit', [KodeSuratMasukController::class, 'edit'])->middleware('auth');
+Route::put('/data-master/kode-surat-masuk/{id}', [KodeSuratMasukController::class, 'update'])->middleware('auth');
 
-Route::get('/surat-masuk/',[SuratMasukController::class, 'index'])->middleware('auth');
+// HALAMAN SURAT-MASUK
+Route::resource('surat-masuk', SuratMasukController::class)->middleware('auth');
 
-Route::get('/surat-keluar/',[SuratKeluarController::class, 'index'])->middleware('auth');
+// HALAMAN SURAT KELUAR
+Route::resource('surat-keluar', SuratKeluarController::class)->middleware('auth');
 
+// HALAMAN GANTI PASSWORD
 Route::get('/ganti-password/',[AdminController::class, 'gantipassword'])->middleware('auth');
-
-
-// Route::get('/data-surat-masuk/',[SuratMasukController::class, 'index']);
-
-Route::get('/data-surat-masuk', function () {
-    return view('surat-masuk.data-surat-masuk', [
-        "halaman" => "Data Surat Keluar",
-        "title" => "Data Surat",
-        "tab_title" => "Data Surat Masuk"
-    ]);
-})->middleware('auth');
-
-Route::get('/data-surat-keluar', function () {
-    return view('surat-keluar.data-surat-keluar', [
-        "halaman" => "Data Surat Keluar",
-        "title" => "Data Surat",
-        "tab_title" => "Data Surat Keluar"
-    ]);
-})->middleware('auth');
+Route::put('/ganti-password/{id}', [AdminController::class, 'updatepassword'])->middleware('auth');

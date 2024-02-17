@@ -13,15 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('surat_keluar', function (Blueprint $table) {
+        Schema::create('surat_keluars', function (Blueprint $table) {
             $table->id();
             $table->string('no_surat',4);
             $table->string('kode_surat_keluar',3);
             $table->string('sekolah')->default('smk');
             $table->char('kode_kab')->default('26');
-            $table->string('bulan',2);
-            $table->string('tahun',5);
-            $table->text('file');
+            $table->string('tujuan');
+            $table->date('tanggal_surat');
+            $table->string('perihal');
+            $table->text('file')->nullable();
             $table->tinyInteger('created_by');
             $table->timestamps();
         });
@@ -34,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('surat_keluar');
+        Schema::dropIfExists('surat_keluars');
     }
 };

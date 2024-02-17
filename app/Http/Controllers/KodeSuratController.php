@@ -14,11 +14,11 @@ class KodeSuratController extends Controller
      */
     public function index()
     {
-        return view('data-master.kode-surat', [
+        return view('dashboard.data-master.kode-surat.index', [
             "halaman" => "Data Master",
             "title" => "Surat Keluar",
             "tab_title" => "Kode Surat",
-            "datas" => kode_yplps::all()
+            "datas" => kode_yplps::orderBy('kode')->get(),
         ]);
     }
 
@@ -41,15 +41,15 @@ class KodeSuratController extends Controller
     public function store(Request $request)
     {
         $validateData = $request->validate([
-            'kode' => ['required', 'regex:/^[a-zA-Z]+$/', 'unique:kode_yplps'],
-            'ket'  => ['required'],
+            'kode' => ['required', 'regex:/^[a-zA-Z]{1,2}$/', 'unique:kode_yplps'],
+            'ket'  => ['required','string'],
         ]);
 
-        $validateData['user_id'] = auth()->user()->id;
+        // $validateData['user_id'] = auth()->user()->id;
 
         kode_yplps::create($validateData);
-
-        return redirect('/data-master/kode-surat')->with('success', 'Data Berhasil Disimpan!');
+        // return redirect('/data-master/kode-surat')->with('message', 'Data Berhasil Disimpan!');
+        return back()->with('message', 'Data Berhasil Disimpan!');
     }
 
     /**
@@ -69,9 +69,18 @@ class KodeSuratController extends Controller
      * @param  \App\Models\kode_yplps  $kode_yplps
      * @return \Illuminate\Http\Response
      */
-    public function edit(kode_yplps $kode_yplps)
+    public function edit($id)
     {
-        
+        $kode_yplps = kode_yplps::find($id);
+        // dd($kode_yplps);
+        return view('dashboard.data-master.kode-surat.edit', [
+            "kode_yplps" => $kode_yplps,
+            "halaman" => "Data Master",
+            "title" => "Surat Keluar",
+            "tab_title" => "Edit Kode Surat",
+            "datas" => kode_yplps::orderBy('kode')->get(),
+            compact([$kode_yplps])
+        ]);
     }
 
     /**
@@ -81,9 +90,22 @@ class KodeSuratController extends Controller
      * @param  \App\Models\kode_yplps  $kode_yplps
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, kode_yplps $kode_yplps)
+    public function update(Request $request, kode_yplps $kode_yplps, $id)
     {
-        //
+        $rules = [
+            'ket'  => ['required','string'],
+        ];
+
+        if($request->kode != $kode_yplps->kode) {
+            $rules['kode'] = ['required', 'regex:/^[a-zA-Z]{1,2}$/', 'unique:kode_yplps'];
+        }
+
+        $validateData = $request->validate($rules);
+        
+        kode_yplps::where('id', $id)
+            ->update($validateData);
+        // dd($validateData);
+        return redirect('/data-master/kode-surat')->with('message', 'Data Berhasil Diupdate!');
     }
 
     /**
@@ -92,12 +114,14 @@ class KodeSuratController extends Controller
      * @param  \App\Models\kode_yplps  $kode_yplps
      * @return \Illuminate\Http\Response
      */
-    public function destroy(kode_yplps $kode_yplps)
+    public function destroy(kode_yplps $kode_yplps, $id)
     {
-        kode_yplps::destroy($kode_yplps->id);
-        // $kode_yplps->delete();
-        return redirect('/data-master/kode-surat')->with('success', 'Data Berhasil Dihapus!');
+        $data = kode_yplps::find($id);
 
-        // dd('Registrasi Berhasil'); //Cara cek berhasil atau tidaknya
+        if($data)
+        {
+            $data->delete();
+        }
+        return redirect('/data-master/kode-surat')->with('message', 'Data Berhasil Dihapus!');
     }
 }

@@ -5,20 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class surat_masuk extends Model
+class kode_surat_keluars extends Model
 {
     use HasFactory;
 
     protected $primaryKey = 'id';
 
-    protected $fillable = [        
-        'kode_surat_masuk',
-        'alamat_pengirim',
-        'tanggal_surat',
-        'nomor_surat',
-        'perihal',
-        'file',
-        'created_by',
+    protected $fillable = [
+        'kode_surat_yplp',
+        'nomor',
+        'ket',
     ];
     public $timestamps = true;
     // public function getRouteKeyName()
