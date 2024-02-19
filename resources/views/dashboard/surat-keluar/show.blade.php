@@ -38,7 +38,7 @@
             </div>
             <!-- /.col -->
             <div class="col-sm-4 invoice-col ml-10">
-              dibuat oleh <strong>{{ ucwords($datas->name) }}</strong>
+              dibuat oleh <strong>{{ ucwords($datas->created_by) }}</strong>
             </div>
             <!-- /.col -->
           </div>

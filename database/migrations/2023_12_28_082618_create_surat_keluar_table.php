@@ -23,7 +23,7 @@ return new class extends Migration
             $table->date('tanggal_surat');
             $table->string('perihal');
             $table->text('file')->nullable();
-            $table->tinyInteger('created_by');
+            $table->string('created_by');
             $table->timestamps();
         });
     }

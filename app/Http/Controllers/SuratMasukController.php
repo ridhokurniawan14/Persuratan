@@ -24,8 +24,7 @@ class SuratMasukController extends Controller
             "tab_title" => "Data Surat Masuk",
             "datas" => DB::table('kode_surat_masuks')
             ->join('surat_masuks', 'kode_surat_masuks.id', '=', 'surat_masuks.kode_surat_masuk')
-            ->join('users', 'surat_masuks.created_by', '=', 'users.id')
-            ->select('kode_surat_masuks.kode', 'surat_masuks.id', 'surat_masuks.alamat_pengirim', 'surat_masuks.tanggal_surat', 'surat_masuks.nomor_surat', 'users.name')
+            ->select('kode_surat_masuks.kode', 'surat_masuks.id', 'surat_masuks.alamat_pengirim', 'surat_masuks.tanggal_surat', 'surat_masuks.nomor_surat', 'surat_masuks.created_by')
             ->orderBy('surat_masuks.id')->get(),
         ]);
     }
@@ -63,7 +62,7 @@ class SuratMasukController extends Controller
         ]);
 
         // Setelah validasi, tambahkan 'created_by' ke dalam data
-        $validateData['created_by'] = auth()->user()->id;
+        $validateData['created_by'] = auth()->user()->name;
 
         if($request->file('file')) {
             $validateData['file'] = $request->file('file')->store('surat-masuk-images');
@@ -91,8 +90,7 @@ class SuratMasukController extends Controller
             "tab_title" => "Surat Masuk",
             'surat_masuk' => DB::table('kode_surat_masuks')
             ->join('surat_masuks', 'kode_surat_masuks.id', '=', 'surat_masuks.kode_surat_masuk')
-            ->join('users', 'surat_masuks.created_by', '=', 'users.id')
-            ->select('kode_surat_masuks.kode', 'kode_surat_masuks.ket', 'surat_masuks.id', 'surat_masuks.alamat_pengirim', 'surat_masuks.tanggal_surat', 'surat_masuks.nomor_surat', 'users.name', 'surat_masuks.perihal', 'surat_masuks.file')
+            ->select('kode_surat_masuks.kode', 'kode_surat_masuks.ket', 'surat_masuks.id', 'surat_masuks.alamat_pengirim', 'surat_masuks.tanggal_surat', 'surat_masuks.nomor_surat', 'surat_masuks.created_by', 'surat_masuks.perihal', 'surat_masuks.file')
             ->where('surat_masuks.id', $surat_masuk->id)->first(),
             'file_extension' => $file_extension,
         ]);
@@ -138,6 +136,9 @@ class SuratMasukController extends Controller
 
         // Validasi data
         $validateData = $request->validate($rules);
+
+        // Setelah validasi, tambahkan 'created_by' ke dalam data
+        $validateData['created_by'] = auth()->user()->name;
 
         // Jika ada file yang diunggah, validasi foto
         if($request->file('file')) {

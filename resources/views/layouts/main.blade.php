@@ -250,7 +250,16 @@
               </p>
             </a>
           </li>
-          @endif             
+          @endif          
+          <li class="nav-item">
+            <a href="/log" class="nav-link {{ Request::is('log','log*') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-history"></i>
+              <p>
+                Log
+                <!-- <span class="right badge badge-danger">New</span> -->
+              </p>
+            </a>
+          </li>
         </ul>
       </nav>
       @endauth
@@ -388,6 +397,15 @@
     }
     toastr.success('{{ Session::get('message') }}','Success!',{timeOut:5000});
 </script>
+@endif
+@if ($messages = Session::get('info'))
+  <script>
+    toastr.options = {
+      "progressBar": true,
+      "closeButton": true
+    }
+    toastr.info('{{ $messages }}', 'Information', { timeOut: 5000 });
+  </script>
 @endif
 @if ($errors->any())
   <script>

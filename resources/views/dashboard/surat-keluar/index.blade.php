@@ -36,10 +36,10 @@
                       <td><?php echo date('d-m-Y', strtotime($data->tanggal_surat)); ?></td>
                       <td>{{ ucwords($data->perihal) }}</td>
                       <td>
-                        @if(strpos($data->name, " ") !== false)
-                            {{ ucwords(substr($data->name, 0, strpos($data->name, " "))) }}
+                        @if(strpos($data->created_by, " ") !== false)
+                            {{ ucwords(substr($data->created_by, 0, strpos($data->created_by, " "))) }}
                         @else
-                            {{ ucwords($data->name) }}
+                            {{ ucwords($data->created_by) }}
                         @endif
                       </td>
                       <td>

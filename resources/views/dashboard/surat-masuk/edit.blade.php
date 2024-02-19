@@ -24,7 +24,7 @@
                         <option>Pilih Kode</option>
                         @foreach ($categories as $category)
                           <option required value="{{ $category->id }}" {{ old('kode_surat_masuk', $surat_masuk->kode_surat_masuk) == $category->id ? 'selected' : '' }}>
-                              {{ ucwords($category->kode) }}-{{ ucwords($category->ket) }}</option>
+                              {{ strtoupper($category->kode) }}-{{ ucwords($category->ket) }}</option>
                         @endforeach
                       </select>
                       @error('kode_surat_masuk')

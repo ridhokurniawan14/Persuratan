@@ -23,8 +23,7 @@ class SuratKeluarController extends Controller
         $datas = DB::table('surat_keluars')
             ->join('kode_surat_keluars', 'kode_surat_keluars.id', '=', 'surat_keluars.kode_surat_keluar')
             ->join('kode_yplps', 'kode_surat_keluars.kode_surat_yplp', '=', 'kode_yplps.id')
-            ->join('users', 'surat_keluars.created_by', '=', 'users.id')
-            ->select('surat_keluars.id', 'surat_keluars.no_surat', 'surat_keluars.sekolah', 'surat_keluars.kode_kab', 'surat_keluars.tujuan', 'surat_keluars.tanggal_surat', 'surat_keluars.perihal', 'surat_keluars.created_by', 'kode_yplps.kode', 'kode_surat_keluars.nomor', 'kode_surat_keluars.ket', 'users.name')
+            ->select('surat_keluars.id', 'surat_keluars.no_surat', 'surat_keluars.sekolah', 'surat_keluars.kode_kab', 'surat_keluars.tujuan', 'surat_keluars.tanggal_surat', 'surat_keluars.perihal', 'surat_keluars.created_by', 'kode_yplps.kode', 'kode_surat_keluars.nomor', 'kode_surat_keluars.ket', 'surat_keluars.created_by')
             ->orderBy('surat_keluars.no_surat')
             ->get();
 
@@ -106,7 +105,7 @@ class SuratKeluarController extends Controller
         ]);
 
         // Setelah validasi, tambahkan 'created_by' ke dalam data
-        $validateData['created_by'] = auth()->user()->id;
+        $validateData['created_by'] = auth()->user()->name;
 
         // Validasi tambahan untuk nomor surat dan tahun
         $nomorSurat = $validateData['no_surat'];
@@ -142,8 +141,7 @@ class SuratKeluarController extends Controller
         $datas = DB::table('surat_keluars')
             ->join('kode_surat_keluars', 'kode_surat_keluars.id', '=', 'surat_keluars.kode_surat_keluar')
             ->join('kode_yplps', 'kode_surat_keluars.kode_surat_yplp', '=', 'kode_yplps.id')
-            ->join('users', 'surat_keluars.created_by', '=', 'users.id')
-            ->select('surat_keluars.id', 'surat_keluars.file', 'surat_keluars.no_surat', 'kode_yplps.ket AS ket_yplp', 'surat_keluars.sekolah', 'surat_keluars.kode_kab', 'surat_keluars.tujuan', 'surat_keluars.tanggal_surat', 'surat_keluars.perihal', 'surat_keluars.created_by', 'kode_yplps.kode', 'kode_surat_keluars.nomor', 'kode_surat_keluars.ket', 'users.name')
+            ->select('surat_keluars.id', 'surat_keluars.file', 'surat_keluars.no_surat', 'kode_yplps.ket AS ket_yplp', 'surat_keluars.sekolah', 'surat_keluars.kode_kab', 'surat_keluars.tujuan', 'surat_keluars.tanggal_surat', 'surat_keluars.perihal', 'surat_keluars.created_by', 'kode_yplps.kode', 'kode_surat_keluars.nomor', 'kode_surat_keluars.ket', 'surat_keluars.created_by')
             ->where('surat_keluars.id', $surat_keluar->id)            
             ->first();      
 
@@ -240,7 +238,7 @@ class SuratKeluarController extends Controller
         }
 
         // Setelah validasi, tambahkan 'created_by' ke dalam data
-        $validateData['created_by'] = auth()->user()->id;
+        $validateData['created_by'] = auth()->user()->name;
 
         // Jika ada file yang diunggah, validasi foto
         if ($request->file('file')) {

@@ -9,6 +9,8 @@ use App\Http\Controllers\KodeSuratKeluarController;
 use App\Http\Controllers\SuratKeluarController;
 use App\Http\Controllers\SuratMasukController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
+use App\Http\Middleware\CheckSuratAvailability;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,9 +22,9 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+// HALAMAN AWAL
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/login');
 });
 
 // HALAMAN LOGIN
@@ -31,13 +33,8 @@ Route::post('/login/',[LoginController::class, 'authenticate']);
 Route::post('/logout/',[LoginController::class, 'logout']); 
 
 // HALAMAN DASHBOARD
-Route::get('/dashboard/',function() {
-    return view('dashboard.index', [
-        "halaman" => "Dashboard",
-        "title" => "Dashboard",
-        "tab_title" => "Dashboard"
-    ]);
-})->middleware('auth');
+// Route::resource('/dashboard/', DashboardController::class)->middleware(['auth']);
+Route::middleware(['auth', 'check.surat'])->resource('/dashboard', DashboardController::class);
 
 // HALAMAN ADMIN
 Route::resource('/admin/', AdminController::class)->middleware(['auth', 'superadmin']);
@@ -73,3 +70,6 @@ Route::resource('surat-keluar', SuratKeluarController::class)->middleware('auth'
 // HALAMAN GANTI PASSWORD
 Route::get('/ganti-password/',[AdminController::class, 'gantipassword'])->middleware('auth');
 Route::put('/ganti-password/{id}', [AdminController::class, 'updatepassword'])->middleware('auth');
+
+// HALAMAN SURAT KELUAR
+Route::resource('log', ActivityLogController::class)->middleware('auth');

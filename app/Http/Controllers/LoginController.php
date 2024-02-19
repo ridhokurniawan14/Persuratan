@@ -27,13 +27,6 @@ class LoginController extends Controller
         }
 
         return back()->with('loginError', 'Username/Password Salah!');
-        
-        // membuat error sesuai keinginan kalimatnya
-        // return back()->withErrors([
-        //     'email' => 'Email Salah',
-        // ])->onlyInput('email');
-
-        // dd('Registrasi Berhasil'); //Cara cek berhasil atau tidaknya
     }
     public function logout(Request $request)
     {
