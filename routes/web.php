@@ -8,6 +8,7 @@ use App\Http\Controllers\KodeSuratMasukController;
 use App\Http\Controllers\KodeSuratKeluarController;
 use App\Http\Controllers\SuratKeluarController;
 use App\Http\Controllers\SuratMasukController;
+use App\Http\Controllers\ActivityLogController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Middleware\CheckSuratAvailability;
@@ -72,4 +73,4 @@ Route::get('/ganti-password/',[AdminController::class, 'gantipassword'])->middle
 Route::put('/ganti-password/{id}', [AdminController::class, 'updatepassword'])->middleware('auth');
 
 // HALAMAN SURAT KELUAR
-Route::resource('log', ActivityLogController::class)->middleware('auth');
+Route::resource('logs', ActivityLogController::class)->middleware('auth');

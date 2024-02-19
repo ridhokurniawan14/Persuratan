@@ -252,7 +252,7 @@
           </li>
           @endif          
           <li class="nav-item">
-            <a href="/log" class="nav-link {{ Request::is('log','log*') ? 'active' : '' }}">
+            <a href="logs" class="nav-link {{ Request::is('log','log*') ? 'active' : '' }}">
               <i class="nav-icon fas fa-history"></i>
               <p>
                 Log
