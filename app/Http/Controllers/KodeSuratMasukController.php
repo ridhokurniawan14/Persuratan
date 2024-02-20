@@ -111,14 +111,21 @@ class KodeSuratMasukController extends Controller
      * @param  \App\Models\kode_surat_masuk  $kode_surat_masuk
      * @return \Illuminate\Http\Response
      */
-    public function destroy(kode_surat_masuk $kode_surat_masuk, $id)
+    // public function destroy(kode_surat_masuk $kode_surat_masuk)
+    // {
+    //     if($kode_surat_masuk)
+    //     {
+    //         $kode_surat_masuk->delete();
+    //     }
+    //     return redirect('data-master/kode-surat-masuk')->with('message', 'Data Berhasil Dihapus!');
+    // }
+    public function destroy(kode_surat_masuk $kode_surat_masuk)
     {
-        $data = kode_surat_masuk::find($id);
-
-        if($data)
-        {
-            $data->delete();
+        if($kode_surat_masuk) {
+            $kode_surat_masuk->delete();
+            return redirect('data-master/kode-surat-masuk')->with('message', 'Data Berhasil Dihapus!');
+        } else {
+            return redirect('data-master/kode-surat-masuk')->with('error', 'Data Tidak Ditemukan!');
         }
-        return redirect('/data-master/kode-surat-masuk')->with('message', 'Data Berhasil Dihapus!');
     }
 }

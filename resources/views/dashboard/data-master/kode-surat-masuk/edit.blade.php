@@ -92,7 +92,7 @@
                           <p>Apakah yakin kode <b>{{ strtoupper($data->kode) }} ({{ ucwords($data->ket) }})</b> dihapus?</p>
                         </div>
                         <div class="modal-footer justify-content-between">
-                          <form action="{{ route('kode.destroy', ['id' => $data->id]) }}" method="post" class="d-inline">
+                          <form action="{{ url('data-master/kode-surat-masuk/'.$data->kode) }}" method="POST" class="d-inline">
                             @method('delete')
                             @csrf
                             <button type="button" class="btn btn-default ml-auto" data-dismiss="modal">Close</button>

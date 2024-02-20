@@ -13,7 +13,7 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form method="POST" action="/surat-keluar/" class="form-horizontal" enctype="multipart/form-data">
+              <form method="POST" action="{{ route('surat-keluar.store') }}" class="form-horizontal" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
                   <div class="form-group row">

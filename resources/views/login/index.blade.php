@@ -41,7 +41,7 @@
     <main class="form-signin">
       <form action="/login" method="POST">
         @csrf
-        <img class="mb-4" src="/img/GrisaSip.png" alt="" width="72" height="72">
+        <img class="mb-4" src="/img/grisasip.png" alt="" width="72" height="72">
         <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
         @if(session()->has('success'));

@@ -45,22 +45,22 @@ Route::put('/admin/{id}', [AdminController::class, 'update'])->middleware('auth'
 
 // HALAMAN DATA MASTER
 // HALAMAN KODE SURAT
-Route::resource('/data-master/kode-surat/', KodeSuratController::class)->middleware('auth');
+Route::resource('/data-master/kode-surat', KodeSuratController::class)->middleware('auth');
 Route::delete('/data-master/kode-surat/{id}', [KodeSuratController::class, 'destroy'])->name('kode_yplps.destroy')->middleware('auth');
 Route::get('/data-master/kode-surat/{id}/edit', [KodeSuratController::class, 'edit'])->middleware('auth');
 Route::put('/data-master/kode-surat/{id}', [KodeSuratController::class, 'update'])->middleware('auth');
 
 // HALAMAN KATEGORI KODE
-Route::resource('/data-master/kategori-kode/', KodeSuratKeluarController::class)->middleware('auth');
+Route::resource('/data-master/kategori-kode', KodeSuratKeluarController::class)->middleware('auth');
 Route::delete('/data-master/kategori-kode/{id}', [KodeSuratKeluarController::class, 'destroy'])->name('id.destroy')->middleware('auth');
 Route::get('/data-master/kategori-kode/{id}/edit', [KodeSuratKeluarController::class, 'edit'])->middleware('auth');
 Route::put('/data-master/kategori-kode/{id}', [KodeSuratKeluarController::class, 'update'])->middleware('auth');
 
 // HALAMAN KODE SURAT MASUK
-Route::resource('/data-master/kode-surat-masuk/', KodeSuratMasukController::class)->middleware('auth');
-Route::delete('/data-master/kode-surat-masuk/{id}',[KodeSuratMasukController::class, 'destroy'])->name('kode.destroy')->middleware('auth');
-Route::get('/data-master/kode-surat-masuk/{id}/edit', [KodeSuratMasukController::class, 'edit'])->middleware('auth');
-Route::put('/data-master/kode-surat-masuk/{id}', [KodeSuratMasukController::class, 'update'])->middleware('auth');
+Route::resource('/data-master/kode-surat-masuk', KodeSuratMasukController::class)->middleware('auth');
+Route::delete('/data-master/kode-surat-masuk/{kode_surat_masuk}', [KodeSuratMasukController::class, 'destroy'])->middleware('auth');
+Route::get('/data-master/kode-surat-masuk/{kode_surat_masuk}/edit', [KodeSuratMasukController::class, 'edit'])->middleware('auth');
+Route::put('/data-master/kode-surat-masuk/{kode_surat_masuk}', [KodeSuratMasukController::class, 'update'])->middleware('auth');
 
 // HALAMAN SURAT-MASUK
 Route::resource('surat-masuk', SuratMasukController::class)->middleware('auth');

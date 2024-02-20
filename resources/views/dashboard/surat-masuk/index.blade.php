@@ -31,7 +31,7 @@
                   @foreach ($datas as $data)
                     <tr>
                       <td>{{ $loop->iteration }}</td>
-                      <td>{{ $data->kode }}</td>
+                      <td>{{ strtoupper($data->kode) }}</td>
                       <td>{{ ucwords($data->alamat_pengirim) }}</td>
                       <td><?php echo date('d-m-Y', strtotime($data->tanggal_surat)); ?></td>
                       <td>{{ $data->nomor_surat }}</td>

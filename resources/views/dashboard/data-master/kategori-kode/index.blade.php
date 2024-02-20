@@ -14,7 +14,7 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form method="POST" action="/data-master/kategori-kode/">
+              <form method="POST" action="/data-master/kategori-kode">
                 @csrf
                 <div class="card-body">
                   <div class="form-group">

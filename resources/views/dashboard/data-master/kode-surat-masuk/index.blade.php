@@ -14,7 +14,7 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form method="POST" action="/data-master/kode-surat-masuk/">
+              <form method="POST" action="/data-master/kode-surat-masuk">
                 @csrf
                 <div class="card-body">
                   <div class="form-group">
@@ -91,8 +91,8 @@
                           <p>Apakah yakin kode <b>{{ strtoupper($data->kode) }} ({{ ucwords($data->ket) }})</b> dihapus?</p>
                         </div>
                         <div class="modal-footer justify-content-between">
-                          <form action="{{ route('kode.destroy', ['id' => $data->id]) }}" method="post" class="d-inline">
-                            @method('delete')
+                          <form action="{{ url('data-master/kode-surat-masuk/'.$data->kode) }}" method="POST" class="d-inline">
+                            @method('DELETE')
                             @csrf
                             <button type="button" class="btn btn-default ml-auto" data-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary">Yakin</button>
