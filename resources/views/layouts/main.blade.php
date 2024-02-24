@@ -378,16 +378,26 @@
       imgPreview.src = oFREvent.target.result;
     }
   }
-  // function previewImage(){
-  //     const image = document.querySelector('#foto')
-  //     const imgPreview = document.querySelector('.img-preview')
-  //     imgPreview.style.display = 'block';
-  //     const oFReader = new FileReader();
-  //     oFReader.readAsDataURL(foto.files[0]);
-  //     oFReader.onload = function(oFREvent){
-  //     imgPreview.src = oFREvent.target.result;
-  //   }
-  // }
+  function previewFile(inputId) {
+      const fileInput = document.getElementById(inputId);
+      const file = fileInput.files[0];
+
+      // Periksa apakah file yang dipilih adalah PDF
+      if (file.type === 'application/pdf') {
+          const reader = new FileReader();
+
+          reader.onload = function (e) {
+              const preview = document.getElementById('filePreview');
+              preview.innerHTML = `<embed src="${e.target.result}" type="application/pdf" width="100%" height="600px">`;
+          }
+
+          reader.readAsDataURL(file);
+      } else {
+          // Jika file bukan PDF, tampilkan pesan kesalahan
+          const preview = document.getElementById('filePreview');
+          preview.innerHTML = '<p class="text-danger">File harus berupa PDF.</p>';
+      }
+  }
 </script>
 @if(Session::has('message'))
 <script>

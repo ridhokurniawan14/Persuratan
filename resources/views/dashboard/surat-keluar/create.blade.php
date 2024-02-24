@@ -65,7 +65,8 @@
                     <div class="col-sm-3">
                       <div class="input-group">
                         <div class="custom-file">
-                          <input name="file" type="file" class="form-control @error('file') is-invalid @enderror" id="file" onchange="previewImage('file')">
+                          {{-- <input name="file" type="file" class="form-control @error('file') is-invalid @enderror" id="file" onchange="previewImage('file')"> --}}
+                          <input name="file" type="file" class="form-control @error('file') is-invalid @enderror" id="file" onchange="previewFile('file')">
                           <label class="input-group-text" for="file">Pilih File</label>
                           @error('file')
                             <div class="invalid-feedback">
@@ -84,7 +85,8 @@
                         </div>
                       @enderror
                     </div>
-                    <img class="img-preview img-fluid mt-3 col-sm-6 mx-auto p-1 d-block">
+                    <div id="filePreview" class="mt-3 col-sm-6 mx-auto d-block"></div>
+                    {{-- <img class="img-preview img-fluid mt-3 col-sm-6 mx-auto p-1 d-block"> --}}
                   </div>
                 </div>
                 <!-- /.card-body -->

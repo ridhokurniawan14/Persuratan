@@ -12,6 +12,7 @@ use App\Http\Controllers\ActivityLogController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Middleware\CheckSuratAvailability;
+use Spatie\Activitylog\Models\Activity;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,7 @@ use App\Http\Middleware\CheckSuratAvailability;
 */
 // HALAMAN AWAL
 Route::get('/', function () {
+    return Activity::all();
     return redirect('/login');
 });
 

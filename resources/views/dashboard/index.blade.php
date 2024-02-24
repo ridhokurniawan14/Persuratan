@@ -83,7 +83,7 @@
                         @foreach ($count5keluar as $count5keluars)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $count5keluars->perihal }}</td>
+                                <td>{{ ucwords($count5keluars->perihal) }}</td>
                                 <td align="center">
                                     <a href="surat-keluar/{{ $count5keluars->id }}" class="badge bg-info"><span class="fas fa-eye"></span></a>
                                     @if ($count5keluars->file)
@@ -172,7 +172,7 @@
                         @foreach ($count5masuk as $count5masuks)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $count5masuks->perihal }}</td>
+                                <td>{{ ucwords($count5masuks->perihal) }}</td>
                                 <td align="center">
                                     <a href="surat-masuk/{{ $count5masuks->id }}" class="badge bg-info"><span class="fas fa-eye"></span></a>
                                     @if ($count5masuks->file)

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ActivityLogger;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -47,12 +48,12 @@ class AdminController extends Controller
             $validateData['foto'] = $request->file('foto')->store('admin-images');
         }
 
-        // $validateData['password'] = bcrypt($validateData['password']);
         $validateData['password'] = Hash::make($validateData['password']);
         
         User::create($validateData);
-
-        // $request->session()->flash('success', 'Registrasi Berhasil! Silahkan Login!');
+        
+        // Catat aktivitas dalam log
+        ActivityLogger::logActivity('create', 'admin', $request->file('foto'));
 
         // dd('Registrasi Berhasil'); //Cara cek berhasil atau tidaknya
         return redirect('/admin')->with('message', 'Data Berhasil Disimpan!');

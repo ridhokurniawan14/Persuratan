@@ -77,22 +77,23 @@
                     <div class="col-sm-3">
                       <div class="input-group">
                         <div class="custom-file">
-                          <input name="file" type="file" class="form-control @error('file') is-invalid @enderror" id="file" onchange="previewImage('file')">
+                          <input name="file" type="file" class="form-control @error('file') is-invalid @enderror" id="file" onchange="previewFile('file')">
+                          {{-- <input name="file" type="file" class="form-control @error('file') is-invalid @enderror" id="file" onchange="previewImage('file')"> --}}
                           <label class="input-group-text" for="file">Pilih File</label>
                           @error('file')
                             <div class="invalid-feedback">
                               {{ $message }}
                             </div>
-                          @enderror                        
+                          @enderror
                         </div>
                       </div>
                     </div>
                     <input type="hidden" name="oldImage" value="{{ $surat_masuk->file }}">
                     @if ($surat_masuk->file)
-                      <img src="{{ asset('storage/' . $surat_masuk->file) }}" class="img-preview img-fluid mt-3 col-sm-6 mx-auto p-1 d-block border border-secondary rounded">
-                    @else
-                      <img class="img-preview img-fluid mt-3 col-sm-6 mx-auto d-block">
+                      <iframe class="m-2 col-sm-6 mx-auto p-1 d-block border border-secondary rounded" src="{{ asset('storage/' . $surat_masuk->file) }}" style="width: 100%; height: 600px;"></iframe>
                     @endif
+                      <div id="filePreview" class="mt-3 col-sm-6 mx-auto d-block"></div>
+                      {{-- <img class="img-preview img-fluid mt-3 col-sm-6 mx-auto d-block"> --}}
                   </div>
                 </div>
                 <!-- /.card-body -->

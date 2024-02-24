@@ -19,6 +19,7 @@
                   <thead>
                   <tr>
                     <th>No</th>
+                    <th>No. Surat</th>
                     <th>Kode</th>
                     <th>Pengirim</th>
                     <th>Tgl.</th>
@@ -31,6 +32,7 @@
                   @foreach ($datas as $data)
                     <tr>
                       <td>{{ $loop->iteration }}</td>
+                      <td>{{ $data->no_surat }}</td>
                       <td>{{ strtoupper($data->kode) }}</td>
                       <td>{{ ucwords($data->alamat_pengirim) }}</td>
                       <td><?php echo date('d-m-Y', strtotime($data->tanggal_surat)); ?></td>
@@ -78,6 +80,7 @@
                   <tfoot>
                   <tr>
                     <th>No</th>
+                    <th>No. Surat</th>
                     <th>Kode</th>
                     <th>Pengirim</th>
                     <th>Tgl.</th>

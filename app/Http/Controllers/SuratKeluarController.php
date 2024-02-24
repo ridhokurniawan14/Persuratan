@@ -101,7 +101,7 @@ class SuratKeluarController extends Controller
             'kode_kab' => '26', // default
             'tanggal_surat' => ['required', 'date'], // Tanggal
             'perihal' => ['required', 'string'], // Teks
-            'file' => ['nullable', 'sometimes', 'image', 'mimes:jpeg,png', 'max:5120'], // Gambar JPEG atau PNG dengan ukuran maksimal 5 MB (5120 KB)
+            'file' => ['nullable', 'sometimes', 'file', 'mimes:pdf', 'max:5120'], // File PDF dengan ukuran maksimal 5 MB (5120 KB)
         ]);
 
         // Setelah validasi, tambahkan 'created_by' ke dalam data
@@ -121,7 +121,7 @@ class SuratKeluarController extends Controller
 
         // Proses penyimpanan jika tidak ada error validasi
         if ($request->file('file')) {
-            $validateData['file'] = $request->file('file')->store('surat-keluar-images');
+            $validateData['file'] = $request->file('file')->store('surat-keluar-files'); // Simpan file PDF di direktori yang ditentukan
         }
 
         surat_keluars::create($validateData);
@@ -241,18 +241,18 @@ class SuratKeluarController extends Controller
         $validateData['created_by'] = auth()->user()->name;
 
         // Jika ada file yang diunggah, validasi foto
-        if ($request->file('file')) {
-            $rules['file'] = ['nullable', 'sometimes', 'image', 'mimes:jpeg,png', 'max:5120']; // Gambar JPEG atau PNG dengan ukuran maksimal 5 MB (5120 KB)
+        if($request->file('file')) {
+            $rules['file'] = ['sometimes', 'file', 'mimes:pdf', 'max:5120'];
         }
 
         // Jika validasi berhasil dan ada file baru yang diunggah, hapus foto lama
-        if ($request->file('file') && $request->oldImage) {
-            Storage::delete($request->oldImage);
+        if ($request->file('file') && $surat_keluar->file) {
+            Storage::delete($surat_keluar->file);
         }
 
         // Jika ada file yang diunggah, simpan foto baru
-        if ($request->file('file')) {
-            $validateData['file'] = $request->file('file')->store('surat-keluar-images');
+        if($request->file('file')) {
+            $validateData['file'] = $request->file('file')->store('surat-keluar-files');
         }
 
         // Update data surat_keluar

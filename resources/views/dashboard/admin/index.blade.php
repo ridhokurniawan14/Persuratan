@@ -107,7 +107,7 @@
                     @foreach ($datas as $data)
                       <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ ucowrds($data->name) }}</td>
+                        <td>{{ ucwords($data->name) }}</td>
                         <td>{{ $data->email }}</td>
                         <td>
                           {{-- <a href="/admin/{{ $data->email }}" class="badge bg-info"><span class="fas fa-eye"></span></a> --}}

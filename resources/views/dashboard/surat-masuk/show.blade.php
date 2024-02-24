@@ -44,7 +44,8 @@
           <div class="row">
             <div class="col-12 text-center">
               @if ($surat_masuk->file)
-                <img src="{{ asset('storage/' . $surat_masuk->file) }}" class="img-preview img-fluid m-2 col-sm-12 mx-auto p-1 d-block border border-secondary rounded">
+                <iframe class="m-2 col-sm-6 mx-auto p-1 d-block border border-secondary rounded" src="{{ asset('storage/' . $surat_masuk->file) }}" style="width: 100%; height: 600px;"></iframe>
+                {{-- <img src="{{ asset('storage/' . $surat_masuk->file) }}" class="img-preview img-fluid m-2 col-sm-12 mx-auto p-1 d-block border border-secondary rounded"> --}}
               @else
                 <div class="alert alert-danger alert-dismissible">
                   <h5><i class="icon fas fa-info"></i> Perhatian!</h5>

@@ -17,6 +17,15 @@
                 @csrf
                 <div class="card-body">
                   <div class="form-group row">
+                    <label for="no_surat" class="col-sm-2 col-form-label">Nomor Surat</label>
+                    <div class="col-sm-1">
+                      <input value="{{ old('no_surat') }}" autofocus required type="number" name="no_surat" class="form-control @error('no_surat') is-invalid @enderror" id="no_surat" placeholder="No. Urut Surat">
+                      @error('no_surat')
+                        <div class="invalid-feedback">
+                          {{ $message }}
+                        </div>
+                      @enderror
+                    </div>
                     <label for="kode_surat_masuk" class="col-sm-2 col-form-label">Kode Surat Masuk</label>
                     <div class="col-sm-2">
                       <select autofocus name="kode_surat_masuk" class="custom-select">
@@ -33,7 +42,7 @@
                       @enderror
                     </div>
                     <label for="alamat_pengirim" class="col-sm-2 col-form-label">Pengirim dari</label>
-                    <div class="col-sm-6">
+                    <div class="col-sm-3">
                       <input value="{{ old('alamat_pengirim') }}" required type="text" name="alamat_pengirim" class="form-control @error('alamat_pengirim') is-invalid @enderror" id="alamat_pengirim" placeholder="Pengirim dari / Nama Instansi">
                       @error('alamat_pengirim')
                         <div class="invalid-feedback">
@@ -76,7 +85,8 @@
                     <div class="col-sm-3">
                       <div class="input-group">
                         <div class="custom-file">
-                          <input name="file" type="file" class="form-control @error('file') is-invalid @enderror" id="file" onchange="previewImage('file')">
+                          <input name="file" type="file" class="form-control @error('file') is-invalid @enderror" id="file" onchange="previewFile('file')">
+                          {{-- <input name="file" type="file" class="form-control @error('file') is-invalid @enderror" id="file" onchange="previewImage('file')"> --}}
                           <label class="input-group-text" for="file">Pilih File</label>
                           @error('file')
                             <div class="invalid-feedback">
@@ -86,7 +96,8 @@
                         </div>
                       </div>
                     </div>
-                    <img class="img-preview img-fluid mt-3 col-sm-6 mx-auto p-1 d-block">
+                    <div id="filePreview" class="mt-3 col-sm-6 mx-auto d-block"></div>
+                    {{-- <img class="img-preview img-fluid mt-3 col-sm-6 mx-auto p-1 d-block"> --}}
                   </div>
                 </div>
                 <!-- /.card-body -->
