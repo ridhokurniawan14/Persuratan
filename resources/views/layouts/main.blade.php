@@ -297,7 +297,7 @@
     <strong>Copyright &copy; 2023-<?= date("Y") ?> <a target="_blank" href="https://www.instagram.com/ridhoo_kurniawaan/">TIM IT GRISAWANGI</a>.</strong>
     All rights reserved.
     <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 1.0
+      <b>Version</b> 1.5
     </div>
   </footer>
 
@@ -359,6 +359,49 @@
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 {{-- <script src="js/pages/dashboard.js"></script> --}}
 <!-- Page specific script -->
+<script>
+  var page = 1; // Nomor halaman awal
+  var isLoading = false; // Menandakan apakah data sedang dimuat
+
+  // Fungsi untuk memeriksa apakah pengguna telah mencapai bagian bawah halaman
+  function isBottom() {
+      return $(window).scrollTop() + $(window).height() >= $(document).height() - 300; // 300 adalah jarak dari bawah halaman sebelum data tambahan dimuat
+  }
+
+  // Fungsi untuk memuat data tambahan
+  function loadMoreData() {
+      if (!isLoading) {
+          isLoading = true; // Set isLoading menjadi true agar data tidak dimuat berulang kali
+          $('#loader').show(); // Tampilkan loader
+
+          $.ajax({
+              url: '/logs', // Ganti dengan URL endpoint API Anda
+              type: 'GET',
+              data: {
+                  page: page // Kirim nomor halaman yang sedang dimuat
+              },
+              success: function(response) {
+                  $('#timeline').append(response); // Tambahkan data tambahan ke timeline
+                  isLoading = false; // Set isLoading kembali menjadi false setelah selesai memuat data
+                  $('#loader').hide(); // Sembunyikan loader
+                  page++; // Tambahkan nomor halaman untuk memuat data berikutnya
+              },
+              error: function(xhr, status, error) {
+                  console.error(error);
+                  isLoading = false; // Set isLoading kembali menjadi false jika terjadi kesalahan saat memuat data
+                  $('#loader').hide(); // Sembunyikan loader
+              }
+          });
+      }
+  }
+
+  // Memuat data tambahan saat pengguna mencapai bagian bawah halaman
+  $(window).scroll(function() {
+      if (isBottom()) {
+          loadMoreData();
+      }
+  });
+</script>
 <script>
   $(function () {
     $("#example1").DataTable({

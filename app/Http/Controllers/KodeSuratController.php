@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ActivityLogger;
 use App\Models\kode_yplps;
 use Illuminate\Http\Request;
 
@@ -45,10 +46,11 @@ class KodeSuratController extends Controller
             'ket'  => ['required','string'],
         ]);
 
-        // $validateData['user_id'] = auth()->user()->id;
-
         kode_yplps::create($validateData);
-        // return redirect('/data-master/kode-surat')->with('message', 'Data Berhasil Disimpan!');
+        
+        // Catat aktivitas dalam log
+        ActivityLogger::logActivity('create', 'Kode Surat YPLP dengan kode '.ucwords($request->kode).' -> '.ucwords($request->ket), '');
+
         return back()->with('message', 'Data Berhasil Disimpan!');
     }
 
@@ -79,7 +81,6 @@ class KodeSuratController extends Controller
             "title" => "Surat Keluar",
             "tab_title" => "Edit Kode Surat",
             "datas" => kode_yplps::orderBy('kode')->get(),
-            compact([$kode_yplps])
         ]);
     }
 
@@ -104,7 +105,10 @@ class KodeSuratController extends Controller
         
         kode_yplps::where('id', $id)
             ->update($validateData);
-        // dd($validateData);
+        
+            // Catat aktivitas dalam log
+        ActivityLogger::logActivity('update', 'Kode Surat YPLP dengan kode ' . ucwords($request->kode) . ' -> ' . ucwords($request->ket), '');
+
         return redirect('/data-master/kode-surat')->with('message', 'Data Berhasil Diupdate!');
     }
 
@@ -122,6 +126,10 @@ class KodeSuratController extends Controller
         {
             $data->delete();
         }
+
+        // Catat aktivitas dalam log
+        ActivityLogger::logActivity('delete', 'Kode Surat YPLP yaitu kode '.ucwords($data->kode).' -> '.ucwords($data->ket), '');
+
         return redirect('/data-master/kode-surat')->with('message', 'Data Berhasil Dihapus!');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ActivityLogger;
 use App\Models\kode_surat_keluars;
 use App\Models\kode_yplps;
 use Illuminate\Http\Request;
@@ -70,6 +71,8 @@ class KodeSuratKeluarController extends Controller
             ],
         ]);
         kode_surat_keluars::create($validateData);
+        // Catat aktivitas dalam log
+        ActivityLogger::logActivity('create', 'Kategori Kode Surat Masuk dengan deskripsi '.ucwords($request->ket), '');
         return redirect('/data-master/kategori-kode')->with('message', 'Data berhasil disimpan!');
     }
 
@@ -103,7 +106,6 @@ class KodeSuratKeluarController extends Controller
                 ->join('kode_yplps', 'kode_surat_keluars.kode_surat_yplp', '=', 'kode_yplps.id')
                 ->select('kode_surat_keluars.id','kode_surat_keluars.nomor','kode_surat_keluars.ket','kode_yplps.kode')
                 ->orderBy('kode_yplps.kode')->get(),
-            compact([$kode_surat_keluars])
         ]);
     }
 
@@ -129,6 +131,8 @@ class KodeSuratKeluarController extends Controller
         
         kode_surat_keluars::where('id', $id)
             ->update($validateData);
+        // Catat aktivitas dalam log
+        ActivityLogger::logActivity('update', 'Kategori Kode Surat Masuk dengan deskripsi ' . ucwords($request->ket), '');
         return redirect('/data-master/kategori-kode')->with('message', 'Data Berhasil Diupdate!');
     }
 
@@ -146,6 +150,8 @@ class KodeSuratKeluarController extends Controller
         {
             $data->delete();
         }
+        // Catat aktivitas dalam log
+        ActivityLogger::logActivity('delete', 'Kategori Kode Surat Masuk yaitu '.ucwords($data->ket), '');
         return redirect('/data-master/kategori-kode')->with('message', 'Data Berhasil Dihapus!');
     }
 }

@@ -14,7 +14,7 @@ class ActivityLogger
 
         switch ($action) {
             case 'create':
-                $description = "telah membuat data $name baru";
+                $description = "telah membuat data baru $name";
                 break;
             case 'update':
                 $description = "telah memperbarui data $name";
@@ -22,10 +22,12 @@ class ActivityLogger
             case 'delete':
                 $description = "telah menghapus data $name";
                 break;
-        }
-
-        if ($file) {
-            $description .= " dan telah mengupload file/foto dengan sukses";
+            case 'login':
+                $description = "telah berhasil login";
+                break;
+            case 'logout':
+                $description = "telah berhasil logout";
+                break;
         }
 
         ActivityLog::create([

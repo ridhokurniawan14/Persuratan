@@ -26,7 +26,7 @@ use Spatie\Activitylog\Models\Activity;
 */
 // HALAMAN AWAL
 Route::get('/', function () {
-    return Activity::all();
+    // return Activity::all();
     return redirect('/login');
 });
 

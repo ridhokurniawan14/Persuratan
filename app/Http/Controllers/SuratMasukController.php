@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ActivityLogger;
 use App\Models\surat_masuk;
 use App\Models\kode_surat_masuk;
 use App\Models\User;
@@ -24,7 +25,7 @@ class SuratMasukController extends Controller
             "tab_title" => "Data Surat Masuk",
             "datas" => DB::table('kode_surat_masuks')
             ->join('surat_masuks', 'kode_surat_masuks.id', '=', 'surat_masuks.kode_surat_masuk')
-            ->select('kode_surat_masuks.kode', 'surat_masuks.id', 'surat_masuks.alamat_pengirim', 'surat_masuks.tanggal_surat', 'surat_masuks.nomor_surat', 'surat_masuks.created_by')
+            ->select('kode_surat_masuks.kode', 'surat_masuks.no_surat', 'surat_masuks.id', 'surat_masuks.alamat_pengirim', 'surat_masuks.tanggal_surat', 'surat_masuks.nomor_surat', 'surat_masuks.created_by')
             ->orderBy('surat_masuks.id')->get(),
         ]);
     }
@@ -53,6 +54,7 @@ class SuratMasukController extends Controller
     public function store(Request $request)
     {
         $validateData = $request->validate([
+            'no_surat' => ['required', 'numeric'], // Angka dengan panjang maksimum 2 digit
             'kode_surat_masuk' => ['required', 'numeric', 'digits_between:1,2'], // Angka dengan panjang maksimum 2 digit
             'alamat_pengirim' => ['required', 'string'], // Teks
             'tanggal_surat' => ['required', 'date'], // Tanggal
@@ -64,11 +66,26 @@ class SuratMasukController extends Controller
         // Setelah validasi, tambahkan 'created_by' ke dalam data
         $validateData['created_by'] = auth()->user()->name;
 
+        // Validasi tambahan untuk nomor surat dan tahun
+        $nomorSurat = $validateData['no_surat'];
+        $tahunSurat = date('Y', strtotime($validateData['tanggal_surat']));
+
+        $existingSurat = surat_masuk::where('no_surat', $nomorSurat)
+            ->whereYear('tanggal_surat', $tahunSurat)
+            ->exists();
+
+        if ($existingSurat) {
+            return redirect()->back()->withErrors(['error' => 'Nomor surat sudah ada di database.'])->withInput();
+        }
+
         if ($request->file('file')) {
             $validateData['file'] = $request->file('file')->store('surat-masuk-files'); // Simpan file PDF di direktori yang ditentukan
         }
 
         surat_masuk::create($validateData);
+
+        // Catat aktivitas dalam log
+        ActivityLogger::logActivity('create', 'Surat Masuk dengan nomor surat '.ucwords($request->nomor_surat), $request->file('file'));
 
         return redirect('/surat-masuk/')->with('message', 'Data Berhasil Disimpan!');
     }
@@ -123,6 +140,7 @@ class SuratMasukController extends Controller
     public function update(Request $request, surat_masuk $surat_masuk)
     {
         $rules = [
+            'no_surat' => ['required', 'numeric'], // Angka dengan panjang maksimum 2 digit
             'kode_surat_masuk' => ['required', 'numeric', 'digits_between:1,2'], // Angka dengan panjang maksimum 2 digit
             'alamat_pengirim' => ['required', 'string'], // Teks
             'tanggal_surat' => ['required', 'date'], // Tanggal
@@ -136,6 +154,19 @@ class SuratMasukController extends Controller
 
         // Validasi data
         $validateData = $request->validate($rules);
+
+        // Validasi tambahan untuk nomor surat dan tahun
+        $nomorSurat = $validateData['no_surat'];
+        $tahunSurat = date('Y', strtotime($validateData['tanggal_surat']));
+
+        $existingSurat = surat_masuk::where('no_surat', $nomorSurat)
+            ->whereYear('tanggal_surat', $tahunSurat)
+            ->where('id', '!=', $surat_masuk->id) // Exclude current record
+            ->exists();
+
+        if ($existingSurat) {
+            return redirect()->back()->withErrors(['error' => 'Nomor surat sudah ada di database.'])->withInput();
+        }
 
         // Setelah validasi, tambahkan 'created_by' ke dalam data
         $validateData['created_by'] = auth()->user()->name;
@@ -158,6 +189,9 @@ class SuratMasukController extends Controller
         // Update data surat_masuk
         $surat_masuk->update($validateData);
 
+        // Catat aktivitas dalam log
+        ActivityLogger::logActivity('update', 'Surat Masuk nomor surat '.ucwords($request->nomor_surat), $request->file('file'));
+
         return redirect('/surat-masuk/')->with('message', 'Data Berhasil Diupdate!');
     }
     /**
@@ -172,6 +206,10 @@ class SuratMasukController extends Controller
             Storage::delete($surat_masuk->file);
         }
         surat_masuk::destroy($surat_masuk->id);
+
+        // Catat aktivitas dalam log
+        ActivityLogger::logActivity('delete', 'Surat Masuk yaitu nomor surat '.ucwords($surat_masuk->nomor_surat), '');
+
         return redirect('/surat-masuk/')->with('message', 'Data Berhasil Dihapus!');
     }
 }

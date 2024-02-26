@@ -53,7 +53,7 @@ class AdminController extends Controller
         User::create($validateData);
         
         // Catat aktivitas dalam log
-        ActivityLogger::logActivity('create', 'admin', $request->file('foto'));
+        ActivityLogger::logActivity('create', 'Admin dengan nama '.ucwords($request->name), $request->file('foto'));
 
         // dd('Registrasi Berhasil'); //Cara cek berhasil atau tidaknya
         return redirect('/admin')->with('message', 'Data Berhasil Disimpan!');
@@ -106,6 +106,9 @@ class AdminController extends Controller
         
         // Update data user
         user::where('id', $id)->update($validateData);
+
+        // Catat aktivitas dalam log
+        ActivityLogger::logActivity('update', 'Admin dengan nama '.ucwords($request->name), $request->file('foto'));
         
         return redirect('/admin')->with('message', 'Data Berhasil Diupdate!');
     }
@@ -123,10 +126,14 @@ class AdminController extends Controller
             Storage::delete($data->foto);
         }
 
+
         if($data)
         {
             $data->delete();
         }
+        // Catat aktivitas dalam log
+        ActivityLogger::logActivity('delete', 'Admin dengan nama '.ucwords($data->name), '');
+        
         return redirect('/admin')->with('message', 'Data Berhasil Dihapus!');
         // dd('Registrasi Berhasil'); //Cara cek berhasil atau tidaknya
     }

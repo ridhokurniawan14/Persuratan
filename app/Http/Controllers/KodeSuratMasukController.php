@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ActivityLogger;
 use App\Models\kode_surat_masuk;
 use Illuminate\Http\Request;
 
@@ -45,10 +46,11 @@ class KodeSuratMasukController extends Controller
             'ket'  => ['required', 'string'],
         ]);
 
-        // $validateData['user_id'] = auth()->user()->id;
-
         kode_surat_masuk::create($validateData);
-        // return redirect('/data-master/kode-surat')->with('message', 'Data Berhasil Disimpan!');
+        
+        // Catat aktivitas dalam log
+        ActivityLogger::logActivity('create', 'Kode Surat Masuk dengan kode '.ucwords($request->kode).' -> '.ucwords($request->ket), '');
+
         return back()->with('message', 'Data Berhasil Disimpan!');
     }
 
@@ -88,11 +90,13 @@ class KodeSuratMasukController extends Controller
      * @param  \App\Models\kode_surat_masuk  $kode_surat_masuk
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, kode_surat_masuk $kode_surat_masuk, $id)
+    public function update(Request $request, $id)
     {
         $rules = [
             'ket'  => ['required', 'string'],
         ];
+
+        $kode_surat_masuk = kode_surat_masuk::findOrFail($id); // Dapatkan instance model berdasarkan ID
 
         if($request->kode != $kode_surat_masuk->kode) {
             $rules['kode'] = ['required', 'alpha', 'unique:kode_surat_masuks'];
@@ -100,8 +104,12 @@ class KodeSuratMasukController extends Controller
 
         $validateData = $request->validate($rules);
         
-        kode_surat_masuk::where('id', $id)
-            ->update($validateData);
+        // Perbarui data menggunakan instance model yang telah ditemukan
+        $kode_surat_masuk->update($validateData);
+        
+        // Catat aktivitas dalam log
+        ActivityLogger::logActivity('update', 'Kode Surat Masuk dengan kode ' . ucwords($kode_surat_masuk->kode) . ' -> ' . ucwords($kode_surat_masuk->ket), '');
+
         return redirect('/data-master/kode-surat-masuk')->with('message', 'Data Berhasil Diupdate!');
     }
 
@@ -111,18 +119,13 @@ class KodeSuratMasukController extends Controller
      * @param  \App\Models\kode_surat_masuk  $kode_surat_masuk
      * @return \Illuminate\Http\Response
      */
-    // public function destroy(kode_surat_masuk $kode_surat_masuk)
-    // {
-    //     if($kode_surat_masuk)
-    //     {
-    //         $kode_surat_masuk->delete();
-    //     }
-    //     return redirect('data-master/kode-surat-masuk')->with('message', 'Data Berhasil Dihapus!');
-    // }
     public function destroy(kode_surat_masuk $kode_surat_masuk)
     {
         if($kode_surat_masuk) {
             $kode_surat_masuk->delete();
+            // Catat aktivitas dalam log
+            ActivityLogger::logActivity('delete', 'Kode Surat Masuk dengan kode '.ucwords($kode_surat_masuk->kode).' -> '.ucwords($kode_surat_masuk->ket), '');
+
             return redirect('data-master/kode-surat-masuk')->with('message', 'Data Berhasil Dihapus!');
         } else {
             return redirect('data-master/kode-surat-masuk')->with('error', 'Data Tidak Ditemukan!');

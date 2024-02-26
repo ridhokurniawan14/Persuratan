@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ActivityLogger;
 use App\Models\surat_keluars;
 use App\Models\kode_surat_keluars;
 use App\Models\User;
@@ -126,9 +127,12 @@ class SuratKeluarController extends Controller
 
         surat_keluars::create($validateData);
 
+        // Catat aktivitas dalam log
+        ActivityLogger::logActivity('create', 'Surat Keluar dengan perihal '.ucwords($request->perihal), $request->file('file'));
+
         return redirect('/surat-keluar/')->with('message', 'Data Berhasil Disimpan!');
     }
-
+    
     /**
      * Display the specified resource.
      *
@@ -258,6 +262,9 @@ class SuratKeluarController extends Controller
         // Update data surat_keluar
         $surat_keluar->update($validateData);
 
+        // Catat aktivitas dalam log
+        ActivityLogger::logActivity('update', 'Surat Keluar dengan perihal '.ucwords($request->perihal), $request->file('file'));
+
         return redirect('/surat-keluar/')->with('message', 'Data Berhasil Diupdate!');
     }
 
@@ -273,6 +280,8 @@ class SuratKeluarController extends Controller
             Storage::delete($surat_keluar->file);
         }
         surat_keluars::destroy($surat_keluar->id);
+        // Catat aktivitas dalam log
+        ActivityLogger::logActivity('delete', 'Surat Keluar tentang '.ucwords($surat_keluar->perihal), '');
         return redirect('/surat-keluar/')->with('message', 'Data Berhasil Dihapus!');
     }
 }

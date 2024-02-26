@@ -63,7 +63,37 @@
           </div>
           <!-- ./col -->
           <div class="col-md-6">
-            
+            @if ($keluarTanpaFilesuratkeluar->isNotEmpty())
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Surat Keluar belum ada foto</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body p-0">
+                  <table class="table table-sm">
+                      <thead>
+                          <tr>
+                              <th style="width: 10px">#</th>
+                              <th>Perihal</th>
+                              <th style="width: 100px"></th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          @foreach ($keluarTanpaFilesuratkeluar as $keluarTanpaFilesuratkeluars)
+                              <tr>
+                                  <td>{{ $loop->iteration }}</td>
+                                  <td>{{ $keluarTanpaFilesuratkeluars->perihal }}</td>
+                                  <td align="center">
+                                      <a href="surat-keluar/{{ $keluarTanpaFilesuratkeluars->id }}" class="badge bg-danger"><span class="fas fa-upload mr-1"></span>UPLOAD FOTO</a>
+                                  </td>
+                              </tr>
+                          @endforeach
+                      </tbody>
+                  </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            @endif
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">5 Surat Keluar Terakhir</h3>
@@ -104,55 +134,77 @@
               <!-- /.card-body -->
             </div>
             <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Surat Keluar belum ada foto</h3>
+              <div class="card-header border-0">
+                <div class="d-flex justify-content-between">
+                  <h3 class="card-title">Sales</h3>
+                  <a href="javascript:void(0);">View Report</a>
+                </div>
               </div>
-              <!-- /.card-header -->
-              <div class="card-body p-0">
-                <table class="table table-sm">
-                  <thead>
-                    <tr>
-                      <th style="width: 10px">#</th>
-                      <th>Perihal</th>
-                      <th style="width: 100px"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @if ($keluarTanpaFilesuratkeluar)
-                        @foreach ($keluarTanpaFilesuratkeluar as $keluarTanpaFilesuratkeluars)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $keluarTanpaFilesuratkeluars->perihal }}</td>
-                                <td align="center">
-                                    <a href="surat-keluar/{{ $keluarTanpaFilesuratkeluars->id }}" class="badge bg-danger"><span class="fas fa-upload mr-1"></span>UPLOAD FOTO</a>
-                                </td>
-                            </tr>
-                        @endforeach
-                    @else
-                        <tr>
-                            <td colspan="3">Tidak ada data yang tersedia</td>
-                        </tr>
-                    @endif
+              <div class="card-body">
+                <div class="d-flex">
+                  <p class="d-flex flex-column">
+                    <span class="text-bold text-lg">$18,230.00</span>
+                    <span>Sales Over Time</span>
+                  </p>
+                  <p class="ml-auto d-flex flex-column text-right">
+                    <span class="text-success">
+                      <i class="fas fa-arrow-up"></i> 33.1%
+                    </span>
+                    <span class="text-muted">Since last month</span>
+                  </p>
+                </div>
+                <!-- /.d-flex -->
 
-                    {{-- @foreach ($keluarTanpaFilesuratkeluar as $keluarTanpaFilesuratkeluars)
-                    <tr>
-                      <td>{{ $loop->iteration }}</td>
-                      <td>{{ $keluarTanpaFilesuratkeluars->perihal }}</td>
-                      <td align="center">
-                        <a href="surat-keluar/{{ $keluarTanpaFilesuratkeluars->id }}" class="badge bg-danger"><span class="fas fa-upload mr-1"></span>UPLOAD FOTO</a>
-                      </td>
-                    </tr>
-                    @endforeach                     --}}
-                  </tbody>
-                </table>
+                <div class="position-relative mb-4">
+                  <canvas id="sales-chart" height="200"></canvas>
+                </div>
+
+                <div class="d-flex flex-row justify-content-end">
+                  <span class="mr-2">
+                    <i class="fas fa-square text-primary"></i> This year
+                  </span>
+
+                  <span>
+                    <i class="fas fa-square text-gray"></i> Last year
+                  </span>
+                </div>
               </div>
-              <!-- /.card-body -->
             </div>
-            
             <!-- /.card -->
           </div>
           <!-- ./col -->
           <div class="col-md-6">
+            @if ($masukTanpaFilesuratmasuk->isNotEmpty())
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Surat Masuk belum ada foto</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body p-0">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th style="width: 10px">#</th>
+                                <th>No. Surat</th>
+                                <th style="width: 100px"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($masukTanpaFilesuratmasuk as $masukTanpaFilesuratmasuks)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $masukTanpaFilesuratmasuks->nomor_surat }}</td>
+                                    <td align="center">
+                                        <a href="surat-masuk/{{ $masukTanpaFilesuratmasuks->id }}" class="badge bg-danger"><span class="fas fa-eye mr-1"></span>UPLOAD FOTO</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            @endif
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">5 Surat Masuk Terakhir</h3>
@@ -186,19 +238,6 @@
                             <td colspan="3">Tidak ada data yang tersedia</td>
                         </tr>
                     @endif
-
-                    {{-- @foreach ($count5masuk as $count5masuks)
-                    <tr>
-                      <td>{{ $loop->iteration }}</td>
-                      <td>{{ $count5masuks->perihal }}</td>
-                      <td align="center">
-                        <a href="surat-masuk/{{ $count5masuks->id }}" class="badge bg-info"><span class="fas fa-eye"></span></a>
-                        @if ($count5masuks->file)
-                          <a target="_blank" href="{{ asset('storage/'.$count5masuks->file) }}" class="badge bg-success" download={{ str_replace(' ', '_', $count5masuks->alamat_pengirim) }}_<?php echo date('d-m-Y', strtotime($count5masuks->tanggal_surat)); ?>.{{ $file_extension }}><i class="fas fa-download"></i></a>
-                        @endif
-                      </td>
-                    </tr>
-                    @endforeach --}}
                   </tbody>
                 </table>
               </div>
@@ -206,49 +245,41 @@
               <!-- /.card-body -->
             </div>
             <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Surat Masuk belum ada foto</h3>
+              <div class="card-header border-0">
+                <div class="d-flex justify-content-between">
+                  <h3 class="card-title">Online Store Visitors</h3>
+                  <a href="javascript:void(0);">View Report</a>
+                </div>
               </div>
-              <!-- /.card-header -->
-              <div class="card-body p-0">
-                <table class="table table-sm">
-                  <thead>
-                    <tr>
-                      <th style="width: 10px">#</th>
-                      <th>No. Surat</th>
-                      <th style="width: 100px"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @if ($masukTanpaFilesuratmasuk)
-                        @foreach ($masukTanpaFilesuratmasuk as $masukTanpaFilesuratmasuks)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $masukTanpaFilesuratmasuks->nomor_surat }}</td>
-                                <td align="center">
-                                    <a href="surat-masuk/{{ $masukTanpaFilesuratmasuks->id }}" class="badge bg-danger"><span class="fas fa-eye mr-1"></span>UPLOAD FOTO</a>
-                                </td>
-                            </tr>
-                        @endforeach
-                    @else
-                        <tr>
-                            <td colspan="3">Tidak ada data yang tersedia</td>
-                        </tr>
-                    @endif
+              <div class="card-body">
+                <div class="d-flex">
+                  <p class="d-flex flex-column">
+                    <span class="text-bold text-lg">820</span>
+                    <span>Visitors Over Time</span>
+                  </p>
+                  <p class="ml-auto d-flex flex-column text-right">
+                    <span class="text-success">
+                      <i class="fas fa-arrow-up"></i> 12.5%
+                    </span>
+                    <span class="text-muted">Since last week</span>
+                  </p>
+                </div>
+                <!-- /.d-flex -->
 
-                    {{-- @foreach ($masukTanpaFilesuratmasuk as $masukTanpaFilesuratmasuks)
-                    <tr>
-                      <td>{{ $loop->iteration }}</td>
-                      <td>{{ $masukTanpaFilesuratmasuks->nomor_surat }}</td>
-                      <td align="center">
-                        <a href="surat-masuk/{{ $masukTanpaFilesuratmasuks->id }}" class="badge bg-danger"><span class="fas fa-eye mr-1"></span>UPLOAD FOTO</a>
-                      </td>
-                    </tr>
-                    @endforeach                     --}}
-                  </tbody>
-                </table>
+                <div class="position-relative mb-4">
+                  <canvas id="visitors-chart" height="200"></canvas>
+                </div>
+
+                <div class="d-flex flex-row justify-content-end">
+                  <span class="mr-2">
+                    <i class="fas fa-square text-primary"></i> This Week
+                  </span>
+
+                  <span>
+                    <i class="fas fa-square text-gray"></i> Last Week
+                  </span>
+                </div>
               </div>
-              <!-- /.card-body -->
             </div>
             <!-- /.card -->
           </div>

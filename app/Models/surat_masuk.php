@@ -12,6 +12,7 @@ class surat_masuk extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [        
+        'no_surat',
         'kode_surat_masuk',
         'alamat_pengirim',
         'tanggal_surat',
