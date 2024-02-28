@@ -354,6 +354,8 @@
 <script src="/js/adminlte.js"></script>
 <!-- Toastr -->
 <script src="/plugins/toastr/toastr.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+
 <!-- AdminLTE for demo purposes -->
 {{-- <script src="js/demo.js"></script> --}}
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
@@ -402,6 +404,114 @@
       }
   });
 </script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      var ctx = document.getElementById('visitors-chart').getContext('2d');
+      
+      // Periksa apakah variabel $labels, $suratMasuk, dan $suratKeluar didefinisikan
+      @if(isset($labels) && isset($suratMasuk) && isset($suratKeluar))
+          // Temukan nilai tertinggi dari kedua data surat masuk dan surat keluar
+          var maxValue = Math.max(...{!! json_encode(array_merge($suratMasuk, $suratKeluar)) !!});
+
+          // Tambahkan beberapa ruang kosong di atas nilai tertinggi
+          var maxY = Math.ceil(maxValue * 1.1); // Menggunakan faktor 1.1 untuk menambah ruang kosong 10%
+
+          var myChart = new Chart(ctx, {
+              type: 'line',
+              data: {
+                  labels: {!! json_encode($labels) !!}, // Label untuk sumbu X (tanggal)
+                  datasets: [{
+                      label: 'Surat Masuk',
+                      data: {!! json_encode($suratMasuk) !!}, // Data jumlah surat masuk dalam 7 hari
+                      borderColor: 'blue',
+                      borderWidth: 2,
+                      fill: false
+                  }, {
+                      label: 'Surat Keluar',
+                      data: {!! json_encode($suratKeluar) !!}, // Data jumlah surat keluar dalam 7 hari
+                      borderColor: 'yellow',
+                      borderWidth: 2,
+                      fill: false
+                  }]
+              },
+              options: {
+                  scales: {
+                      yAxes: [{
+                          ticks: {
+                              beginAtZero: true,
+                              max: maxY // Atur nilai maksimum untuk sumbu Y (yAxis)
+                          }
+                      }]
+                  }
+              }
+          });
+      @endif
+  });
+</script>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      var ctx = document.getElementById('sales-chart').getContext('2d');
+      
+      // Periksa apakah variabel $suratMasukPerBulan dan $suratKeluarPerBulan didefinisikan
+      @if(isset($suratMasukPerBulan) || isset($suratKeluarPerBulan))
+          // Gabungkan data surat masuk dan surat keluar jika keduanya didefinisikan
+          var allData = [];
+          @if(isset($suratMasukPerBulan))
+              allData.push(...{!! json_encode($suratMasukPerBulan) !!});
+          @endif
+          @if(isset($suratKeluarPerBulan))
+              allData.push(...{!! json_encode($suratKeluarPerBulan) !!});
+          @endif
+
+          // Temukan nilai tertinggi dari kedua data surat masuk dan surat keluar
+          var maxValue = Math.max(...allData);
+
+          // Tambahkan beberapa ruang kosong di atas nilai tertinggi
+          var maxY = Math.ceil(maxValue * 1.1); // Menggunakan faktor 1.1 untuk menambah ruang kosong 10%
+
+          var myChart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'],
+                  datasets: [
+                      @if(isset($suratMasukPerBulan))
+                          {
+                              label: 'Surat Masuk',
+                              data: {!! json_encode($suratMasukPerBulan) !!},
+                              backgroundColor: 'rgba(75, 192, 192, 0.2)', // Warna hijau untuk surat masuk
+                              borderColor: 'rgba(75, 192, 192, 1)',
+                              borderWidth: 1
+                          },
+                      @endif
+                      @if(isset($suratKeluarPerBulan))
+                          {
+                              label: 'Surat Keluar',
+                              data: {!! json_encode($suratKeluarPerBulan) !!},
+                              backgroundColor: 'rgba(255, 206, 86, 0.2)', // Warna kuning untuk surat keluar
+                              borderColor: 'rgba(255, 206, 86, 1)',
+                              borderWidth: 1
+                          }
+                      @endif
+                  ]
+              },
+              options: {
+                  scales: {
+                      yAxes: [{
+                          ticks: {
+                              beginAtZero: true,
+                              max: maxY // Atur nilai maksimum untuk sumbu Y (yAxis)
+                          }
+                      }]
+                  }
+              }
+          });
+      @endif
+  });
+</script>
+
+
 <script>
   $(function () {
     $("#example1").DataTable({

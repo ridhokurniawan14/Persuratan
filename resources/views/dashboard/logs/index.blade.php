@@ -28,7 +28,7 @@
                       <div class="timeline-item">
                           {{-- <span class="time"><i class="fas fa-clock"></i> {{ $log->created_at->format('H:i') }}</span> --}}
                           <span class="time"><i class="fas fa-clock"></i> {{ $log->created_at->diffForHumans() }}</span>
-                          <h3 class="timeline-header"><a href="#">{{ $log->name }}</a> <span style="color: {{ $log->logColor }};  font-weight: bold;">({{ strtoupper($log->log_name) }})</span></h3>
+                          <h3 class="timeline-header"><a href="#">{{ ucwords($log->name) }}</a> <span style="color: {{ $log->logColor }};  font-weight: bold;">({{ strtoupper($log->log_name) }})</span></h3>
                           <div class="timeline-body">
                             {{ ucfirst($log->description) }}
                             @if ($log->file)

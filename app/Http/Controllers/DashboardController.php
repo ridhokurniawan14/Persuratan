@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 // use App\Models\surat_keluars;
 // use App\Models\kode_surat_keluars;
 // use App\Models\User;
+
+use App\Models\surat_keluars;
+use App\Models\surat_masuk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -76,6 +79,73 @@ class DashboardController extends Controller
             $data->bulan_surat_romawi = $bulan_romawi;
         }
 
+        // Hitung Banyak Surat Keluar/Masuk
+        $suratMasukPerBulan = [];
+        $suratKeluarPerBulan = [];
+
+        // Hitung jumlah surat masuk dan surat keluar untuk setiap bulan
+        for ($i = 1; $i <= 12; $i++) {
+            $jumlahSuratMasuk = DB::table('kode_surat_masuks')
+                ->join('surat_masuks', 'kode_surat_masuks.id', '=', 'surat_masuks.kode_surat_masuk')
+                ->whereMonth('surat_masuks.tanggal_surat', $i)
+                ->whereYear('surat_masuks.tanggal_surat', date('Y'))
+                ->count();
+
+            $jumlahSuratKeluar = DB::table('surat_keluars')
+                ->whereMonth('tanggal_surat', $i)
+                ->whereYear('tanggal_surat', date('Y'))
+                ->count();
+
+            $suratMasukPerBulan[] = $jumlahSuratMasuk;
+            $suratKeluarPerBulan[] = $jumlahSuratKeluar;
+        }
+        // Hitung total surat keluar untuk bulan ini
+        $total_surat_keluar = DB::table('surat_keluars')
+        ->whereYear('tanggal_surat', Carbon::now()->year)
+        ->whereMonth('tanggal_surat', Carbon::now()->month)
+        ->count();
+
+        // Hitung total surat masuk untuk bulan ini
+        $total_surat_masuk = DB::table('kode_surat_masuks')
+            ->join('surat_masuks', 'kode_surat_masuks.id', '=', 'surat_masuks.kode_surat_masuk')
+            ->whereYear('surat_masuks.tanggal_surat', Carbon::now()->year)
+            ->whereMonth('surat_masuks.tanggal_surat', Carbon::now()->month)
+            ->count();
+
+
+        // Ambil data surat masuk dan surat keluar untuk 7 hari terakhir
+        $labels = [];
+        $suratMasuk = [];
+        $suratKeluar = [];
+
+        for ($i = 6; $i >= 0; $i--) {
+            // Hitung tanggal 7 hari yang lalu dari sekarang
+            $tanggal = now()->subDays($i);
+
+            // Tambahkan format tanggal yang disingkat ke dalam array labels ('d Mmm')
+            $labels[] = $tanggal->format('d M');
+
+            // Ambil data surat masuk untuk tanggal tersebut
+            $countSuratMasuk = surat_masuk::whereDate('tanggal_surat', $tanggal)->count();
+            $suratMasuk[] = $countSuratMasuk;
+
+            // Ambil data surat keluar untuk tanggal tersebut
+            $countSuratKeluar = surat_keluars::whereDate('tanggal_surat', $tanggal)->count();
+            $suratKeluar[] = $countSuratKeluar;
+        }
+
+        // Hitung kenaikan persentase dalam 7 hari terakhir untuk surat masuk
+        $kenaikanSuratMasuk = 0;
+        if ($suratMasuk[0] !== 0) {
+            $kenaikanSuratMasuk = (($suratMasuk[6] - $suratMasuk[0]) / $suratMasuk[0]) * 100;
+        }
+
+        // Hitung kenaikan persentase dalam 7 hari terakhir untuk surat keluar
+        $kenaikanSuratKeluar = 0;
+        if ($suratKeluar[0] !== 0) {
+            $kenaikanSuratKeluar = (($suratKeluar[6] - $suratKeluar[0]) / $suratKeluar[0]) * 100;
+        }
+
         return view('dashboard.index', [
             "halaman" => "Dashboard",
             "title" => "Dashboard",
@@ -90,6 +160,15 @@ class DashboardController extends Controller
             "keluarTanpaFilesuratkeluar" => $keluarTanpaFilesuratkeluar ?? null,
             "masukTanpaFilesuratmasuk" => $masukTanpaFilesuratmasuk ?? null,
             "pemberitahuan" => $pemberitahuan ?? null,
+            "suratMasukPerBulan" => $suratMasukPerBulan ?? null,
+            "suratKeluarPerBulan" => $suratKeluarPerBulan ?? null,
+            "total_surat_masuk" => $total_surat_masuk ?? null,
+            "total_surat_keluar" => $total_surat_keluar ?? null,
+            "labels" => $labels ?? null,
+            "suratMasuk" => $suratMasuk ?? null,
+            "suratKeluar" => $suratKeluar ?? null,
+            "kenaikanSuratMasuk" => $kenaikanSuratMasuk,
+            "kenaikanSuratKeluar" => $kenaikanSuratKeluar,
         ]);
     }
     // Fungsi untuk mengonversi bulan menjadi angka Romawi

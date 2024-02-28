@@ -18,16 +18,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
         User::create([
             'name' => 'Ridho Kurniawan',
             'email'=> 'ridho@gmail.com',
-            'password' => bcrypt('ridho123'),
+            'password' => bcrypt('admin'),
             'is_superadmin' => '1'            
         ]);
         kode_yplps::create([
