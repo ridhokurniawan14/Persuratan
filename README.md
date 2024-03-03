@@ -1,10 +1,4 @@
 <p align="center"><img src="public/img/grisasip.png" width="400" alt="Nama Aplikasi Logo"></p>
-<p align="center">
-<a href="https://link.ke.github.actions"><img src="https://link.ke.github.actions.badge.svg" alt="Status Pembangunan"></a>
-<a href="https://link.ke.packagist"><img src="https://img.shields.io/packagist/dt/penyimpanan/repository" alt="Total Unduhan"></a>
-<a href="https://link.ke.packagist"><img src="https://img.shields.io/packagist/v/penyimpanan/repository" alt="Versi Terbaru"></a>
-<a href="https://link.ke.packagist"><img src="https://img.shields.io/packagist/l/penyimpanan/repository" alt="Lisensi"></a>
-</p>
 Tentang Aplikasi
 Aplikasi Surat Masuk dan Surat Keluar adalah sebuah platform yang didesain untuk membantu dalam manajemen surat secara efisien. Aplikasi ini dilengkapi dengan fitur-fitur berikut:
 
