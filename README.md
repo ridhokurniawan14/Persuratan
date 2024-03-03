@@ -1,4 +1,4 @@
-<p align="center"><img src="https://link.ke.github.logo" width="400" alt="Nama Aplikasi Logo"></p>
+<p align="center"><img src="public/img/grisasip.png" width="400" alt="Nama Aplikasi Logo"></p>
 <p align="center">
 <a href="https://link.ke.github.actions"><img src="https://link.ke.github.actions.badge.svg" alt="Status Pembangunan"></a>
 <a href="https://link.ke.packagist"><img src="https://img.shields.io/packagist/dt/penyimpanan/repository" alt="Total Unduhan"></a>
@@ -29,7 +29,7 @@ Kode Etik
 Untuk memastikan bahwa komunitas pengguna aplikasi ini ramah bagi semua orang, harap periksa dan patuhi Kode Etik kami.
 
 Kerentanan Keamanan
-Jika Anda menemukan kerentanan keamanan dalam aplikasi ini, silakan laporkan melalui email ke alamatemail@domain.com. Semua kerentanan keamanan akan segera ditangani.
+Jika Anda menemukan kerentanan keamanan dalam aplikasi ini, silakan laporkan melalui email ke ridhokurniawan14@gmail.com. Semua kerentanan keamanan akan segera ditangani.
 
 Lisensi
 Aplikasi Surat Masuk dan Surat Keluar adalah perangkat lunak sumber terbuka yang dilisensikan di bawah lisensi MIT.
