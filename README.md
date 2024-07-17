@@ -10,7 +10,7 @@ Aplikasi Persuratan adalah sebuah Aplikasi yang didesain untuk membantu dalam ma
 </ul>
 
 <h1>Gallery</h1>
-langsung lihat disini saja ya : <a target="_blank" href="https://www.upwork.com/freelancers/~0123cd36836ff6989f?p=1800522631765889024">klik disini oy</a>
+langsung lihat disini saja ya : <a target="_blank" href="https://blog.ridhokurniawan.com/2024/02/27/aplikasi-arsip-surat-masuk-dan-keluar/">klik disini oy</a>
 
 <h1>Cara Konstribusi</h1>
 Menggunakan perangkat lunak open source tentunya sangat baik, karena selain tidak melakukan pembajakan, kita juga mendukung para pengembang dari perangkat lunak yang kita gunakan. Tetapi, akan lebih baik lagi jika kita juga ikut berkontribusi, mulai dari kontribusi pengunaan, pelaporan bug, sampai dengan kontribusi kode. Kontribusi pada proyek open source akan membantu untuk meningkatkan kemampuan pengembangan perangkat lunak. Berikut langkah-langkahnya (per bulan Juli 2024) :
